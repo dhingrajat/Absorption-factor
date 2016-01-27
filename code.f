@@ -4,48 +4,6 @@
         call cordinate
       stop
       end
-
-      subroutine cordinate
-      include 'input.in'
-* Surface1
-        do i=1,noc(1)-1
-          if (i.eq.1)then
-            ds(i)=(dx1+dy1)/2.0
-            fy(i)=dy1/2.0
-            bx(i)=dx1/2.0
-            by(i)=0.0
-          elseif ((i.gt.1).and.(i.lt.M0))then
-            ds(i)=dy1
-            fy(i)=fy(i-1)+dy1
-          elseif (i.eq.M0)then
-            ds(i)=(dy1+dy2)/2.0
-            fy(i)=fy(i-1)+(dy1+dy2)/2.0
-          else
-            ds(i)=dy2
-            fy(i)=fy(i-1)+dy2
-          endif
-          fx(i)=0.0
-        enddo
-* Surface2
-        do i=noc(1),noc(2)-1
-          if (i.eq.noc(1))then
-            ds(i)=(dx1+dy1)/2.0
-            fx(i)=dx1/2.0
-          else
-            ds(i)=dx1
-            fx(i)=fx(i-1)+dx1
-          endif
-          fy(i)=ycp1
-        enddo
-* Surface3
-        do i=noc(2),noc(3)-1
-          if (i.eq.noc(2))then
-            
-          else
-          endif
-        enddo
-      return
-      end
 *===================================*
       subroutine location
       include 'input.in'
@@ -117,3 +75,109 @@
 
       return
       end
+*===================================*
+      subroutine cordinate
+      include 'input.in'
+* Surface1
+        do i=1,noc(1)-1
+          if (i.eq.1)then
+            ds(i)=(dx1+dy1)/2.0
+            fy(i)=dy1/2.0
+            bx(i)=dx1/2.0
+            by(i)=0.0
+          elseif ((i.gt.1).and.(i.lt.M0))then
+            ds(i)=dy1
+            fy(i)=fy(i-1)+dy1
+          elseif (i.eq.M0)then
+            ds(i)=(dy1+dy2)/2.0
+            fy(i)=fy(i-1)+(dy1+dy2)/2.0
+          else
+            ds(i)=dy2
+            fy(i)=fy(i-1)+dy2
+          endif
+          fx(i)=0.0
+        enddo
+* Surface2
+        do i=noc(1),noc(2)-1
+          if (i.eq.noc(1))then
+            ds(i)=(dx1+dy2)/2.0
+            fx(i)=dx1/2.0
+          else
+            ds(i)=dx1
+            fx(i)=fx(i-1)+dx1
+          endif
+          fy(i)=ycp1
+        enddo
+* Surface3
+        do i=noc(2),noc(3)-1
+          if (i.eq.noc(2))then
+            ds(i)=(dx1+dy2)/2.0
+            fy(i)=fy(i-1)+dy2/2.0
+          else
+            ds(i)=dy2
+            fy(i)=fy(i-1)+dy2
+          endif
+          fx(i)=xcp
+        enddo
+* Surface4
+        do i=noc(3),noc(4)-1
+          if (i.eq.noc(3))then
+            ds(i)=(dx1+dy2)/2.0
+            fx(i)=fx(i-1)-dx1/2.0
+          else
+            ds(i)=dx1
+            fx(i)=fx(i-1)-dx1
+          endif
+          fy(i)=ycp2
+        enddo
+* Surface5
+        do i=noc(4),noc(5)-1
+          if (i.eq.noc(4))then
+            ds(i)=(dx1+dy2)/2.0
+            fy(i)=fy(i-1)+dy2/2.0
+          else
+            ds(i)=dy2
+            fy(i)=fy(i-1)+dy2
+          endif
+          fx(i)=0.0
+        enddo
+* Surface6
+        do i=noc(5),noc(6)-1
+          if (i.eq.noc(5))then
+            ds(i)=(dx1+dy2)/2.0
+            fx(i)=fx(i-1)+dx1/2.0
+          else
+            ds(i)=dx1
+            fx(i)=fx(i-1)+dx1
+          endif
+          fy(i)=ycp3
+        enddo
+* Surface7
+        do i=noc(6),noc(7)-1
+          if (i.eq.noc(6))then
+            ds(i)=(dx1+dy2)/2.0
+            fy(i)=fy(i-1)+dy2/2.0
+          else
+            ds(i)=dy2
+            fy(i)=fy(i-1)+dy2
+          endif
+          fx(i)=xcp
+        enddo
+* Surface8
+        do i=noc(7),noc(8)-1
+          if (i.eq.noc(7))then
+            ds(i)=(dx1+dy2)/2.0
+            fx(i)=fx(i-1)-dx1/2.0
+          else
+            ds(i)=dx1
+            fx(i)=fx(i-1)-dx1
+          endif
+          fy(i)=ycp3+ycp2-ycp1
+        enddo
+* Surface9
+        do i=noc(8),noc(9)-1
+            
+        enddo
+      return
+      end
+
