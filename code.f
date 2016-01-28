@@ -263,6 +263,58 @@
           fy(i)=3.0*ycp3+ycp2-3.0*ycp1
         enddo
 * Surface17
+        do i=noc(16),noc(17)-1
+          if (i.eq.noc(16))then
+            ds(i)=(dx1+dy2)/2.0
+            fy(i)=fy(i-1)+dy2/2.0
+          elseif ((i.gt.noc(16)).and.(i.lt.M3))then
+            ds(i)=dy2
+            fy(i)=fy(i-1)+dy2
+          elseif (i.eq.M3)then
+            ds(i)=(dy2+dy3)/2.0
+            fy(i)=fy(i-1)+(dy2+dy3)/2.0
+          else
+            ds(i)=dy3
+            fy(i)=fy(i-1)+dy3
+          endif
+          fx(i)=0.0
+        enddo
+* Surface18
+        do i=noc(17),noc(18)-1
+          if (i.eq.noc(17))then
+            ds(i)=(dx1+dy3)/2.0
+            fx(i)=dx1/2.0
+          elseif ((i.gt.noc(17)).and.(i.lt.M2))then
+            ds(i)=dx1
+            fx(i)=fx(i-1)+dx1
+          elseif (i.eq.M2)then
+            ds(i)=(dx1+dx2)/2.0
+            fx(i)=fx(i-1)+(dx1+dx2)/2.0
+          elseif ((i.gt.M2).and.(i.lt.M3))then
+            ds(i)=dx2
+            fx(i)=fx(i-1)+dx2
+          elseif (i.eq.M3)then
+            ds(i)=(dx2+dx3)/2.0
+            fx(i)=fx(i-1)+(dx2+dx3)/2.0
+          else
+            ds(i)=dx3
+            fx(i)=fx(i-1)+dx3
+          endif
+          fy(i)=y1+y4+y3
+        enddo
+* Surface19
+        do i=noc(18),noc(19)-1
+          if (i.eq.noc(18))then
+          elseif ()then
+          elseif ()then
+          elseif ()then
+          elseif ()then
+          else
+          endif
+          fx(i)=x1+x2+x3
+        enddo
+* Surface20
+        do i=noc(19),noc(20)
+        enddo
       return
       end
-
