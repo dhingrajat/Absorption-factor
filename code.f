@@ -176,8 +176,41 @@
         enddo
 * Surface9
         do i=noc(8),noc(9)-1
-            
+          if (i.eq.noc(8))then
+            ds(i)=(dx1+dy2)/2.0
+            fy(i)=fy(i-1)+dy2/2.0
+          else
+            ds(i)=dy2
+            fy(i)=fy(i-1)+dy2
+          endif
+          fx(i)=0.0
         enddo
+* Surface10
+        do i=noc(9),noc(10)-1
+          if (i.eq.noc(9))then
+            ds(i)=(dx1+dy2)/2.0
+            fx(i)=fx(i-1)+dx1/2.0
+          else
+            ds(i)=dx1
+            fx(i)=fx(i-1)+dx1
+          endif
+          fy(i)=2ycp3-ycp1
+        enddo
+* Surface11
+        do i=noc(10),noc(11)-1
+          if (i.eq.noc(10))then
+            ds(i)=(dx1+dy2)/2.0
+            fy(i)=fy(i-1)+dy2/2.0
+          else
+            ds(i)=dy2
+            fy(i)=fy(i-1)+dy2
+          endif
+          fx(i)=xcp
+        enddo
+* Surface12
+* Surface13
+* Surface14
+* Surface15
       return
       end
 
