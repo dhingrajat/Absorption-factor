@@ -15,25 +15,25 @@
         dy3=
 
 ***** Four edge co-ordinates of chips
-        x1=xcp
-        y1=ycp1
-        x2=xcp
-        y2=ycp2
+        xo1=xcp
+        yo1=ycp1
+        xo2=xcp
+        yo2=ycp2
 
-        x3=xcp
-        y3=ycp3
-        x4=xcp
-        y4=ycp3+ycp2-ycp1
+        xo3=xcp
+        yo3=ycp3
+        xo4=xcp
+        yo4=ycp3+ycp2-ycp1
 
-        x5=xcp
-        y5=2.d0*ycp3-ycp1
-        x6=xcp
-        y6=2.d0*ycp3+ycp2-2.d0*ycp1
+        xo5=xcp
+        yo5=2.d0*ycp3-ycp1
+        xo6=xcp
+        yo6=2.d0*ycp3+ycp2-2.d0*ycp1
 
-        x7=xcp
-        y7=3.d0*ycp3-2.d0*ycp1
-        x8=xcp
-        y8=3.d0*ycp3+ycp2-3.d0*ycp1
+        xo7=xcp
+        yo7=3.d0*ycp3-2.d0*ycp1
+        xo8=xcp
+        yo8=3.d0*ycp3+ycp2-3.d0*ycp1
 
 ***** Total number of corner points 20; noc=20
 ***** M0, 
@@ -208,9 +208,61 @@
           fx(i)=xcp
         enddo
 * Surface12
+        do i=noc(11),noc(12)-1
+          if (i.eq.noc(11))then
+            ds(i)=(dx1+dy2)/2.0
+            fx(i)=fx(i-1)-dx1/2.0
+          else
+            ds(i)=dx1
+            fx(i)=fx(i-1)-dx1
+          endif
+          fy(i)=2.0*ycp3-ycp2-2.0*ycp1
+        enddo
 * Surface13
+        do i=noc(12),noc(13)-1
+          if (i.eq.noc(12))then
+            ds(i)=(dx1+dy2)/2.0
+            fy(i)=fy(i-1)+dy2/2.0
+          else
+            ds(i)=dy2
+            fy(i)=fy(i-1)+dy2
+          endif
+          fx(i)=0.0
+        enddo
 * Surface14
+        do i=noc(13),noc(14)-1
+          if (i.eq.noc(13))then
+            ds(i)=(dx1+dy2)/2.0
+            fx(i)=fx(i-1)+dx1/2.0
+          else
+            ds(i)=dx1
+            fx(i)=fx(i-1)+dx1
+          endif
+          fy(i)=3.0*ycp3-2.0*ycp1
+        enddo
 * Surface15
+        do i=noc(14),noc(15)-1
+          if (i.eq.noc(14))then
+            ds(i)=(dx1+dy2)/2.0
+            fy(i)=fy(i-1)+dy2/2.0
+          else
+            ds(i)=dy2
+            fy(i)=fy(i-1)+dy2
+          endif
+          fx(i)=xcp
+        enddo
+* Surface16
+        do i=noc(15),noc(16)-1
+          if (i.eq.noc(15))then
+            ds(i)=(dx1+dy2)/2.0
+            fx(i)=fx(i-1)-dx1/2.0
+          else
+            ds(i)=dx1
+            fx(i)=fx(i-1)-dx1
+          endif
+          fy(i)=3.0*ycp3+ycp2-3.0*ycp1
+        enddo
+* Surface17
       return
       end
 
