@@ -3,7 +3,131 @@
         call location
         call cordinate
         call self_vf
+***** Complete line w/o first and last point on it
+        call surface1
       stop
+      end
+*===================================*
+      subroutine surface1
+      include 'input.in'
+* Surface 1 with surface 2
+        do i=2,noc(1)-1
+        do j=noc(1)+1,noc(2)-1
+          cs1=sqrt((fy(j)-fy(i))**2+(fx(j)-fx(i))**2)
+          cs2=sqrt((by(j)-by(i))**2+(bx(j)-bx(i))**2)
+          uc1=sqrt((by(j)-fy(i))**2+(bx(j)-fx(i))**2)
+          uc2=sqrt((fy(j)-by(i))**2+(fx(j)-bx(i))**2)
+          v_f(i,j)=0.5*(cs1+cs2-uc1-uc2)/ds(i)
+        enddo
+        enddo
+* Surface 1 with surface 3-to-17 and 18-(partly)
+        do i=2,noc(1)-1
+        do j=noc(2)+1,noc(17)+noc(2)-noc(1)
+          v_f(i,j)=0.0
+        enddo
+        enddo
+* Surface 1 with noc(17)+noc(2)-noc(1)+1 to noc(18)-1
+        do i=2,noc(1)-1
+        do j=noc(17)+noc(2)-noc(1)+1,noc(18)-1
+          cond=cy1-cx1*(fy(j)-by(i))/(fx(j)-bx(i))
+          cond=cond+bx(i)*(fy(j)-by(i))/(fx(j)-bx(i))-by(i)
+          if (cond.le.0.0)then
+            v_f(i,j)=0.0
+          else
+            uc2=sqrt((fy(j)-by(i))**2+(fx(j)-bx(i))**2)
+            cond1=cy1-cx1*(by(j)-fy(i))/(bx(j)-fx(i))
+            cond1=cond1+fx(i)*(by(j)-fy(i))/(bx(j)-fx(i))-fy(i)
+            if (cond1.ge.0.0)then
+              cs1=sqrt((fy(j)-fy(i))**2+(fx(j)-fx(i))**2)
+              cs2=sqrt((by(j)-by(i))**2+(bx(j)-bx(i))**2)
+              uc1=sqrt((by(j)-fy(i))**2+(bx(j)-fx(i))**2)
+              v_f(i,j)=.5d0*(cs1+cs2-uc1-uc2)/ds(i)
+            else
+              uc1=sqrt((by(j)-cy1)**2+(bx(j)-cx1)**2)
+              uc1=uc1+sqrt((cy1-fy(i))**2+(cx1-fx(i))**2)
+              cond2=cy1-cx1*(fy(j)-fy(i))/(fx(j)-fx(i))
+              cond2=cond2+fx(i)*(fy(j)-fy(i))/(fx(j)-fx(i))-fy(i)
+              if (cond2.lt.0.d0) then
+                cs1=sqrt((fy(j)-cy1)**2+(fx(j)-cx1)**2)
+                cs1=cs1+sqrt((cy1-fy(i))**2+(cx1-fx(i))**2)
+              else
+                cs1=sqrt((fy(j)-fy(i))**2+(fx(j)-fx(i))**2)
+              endif
+              cond3=cy1-cx1*(by(j)-by(i))/(bx(j)-bx(i))
+              cond3=cond3+bx(i)*(by(j)-by(i))/(bx(j)-bx(i))-by(i)
+              if (cond3.lt.0.d0)then
+                cs2=sqrt((by(j)-cy1)**2+(bx(j)-cx1)**2)
+                cs2=cs2+sqrt((cy1-by(j))**2+(cx1-bx(i))**2)
+              else
+                cs2=sqrt((by(j)-by(i))**2+(bx(j)-bx(i))**2)
+              endif
+              v_f(i,j)=0.5d0*(cs1+cs2-uc1-uc2)/ds(i)
+            endif
+          endif
+        enddo
+        enddo
+* Surface 1 with surface 19
+        do i=2,noc(1)-1
+        do j=noc(18)+1,noc(19)-1
+          cond=cy1-cx1*(fy(j)-by(i))/(fx(j)-bx(i))
+          cond=cond+bx(i)*(fy(j)-by(i))/(fx(j)-bx(i))-by(i)
+          if (cond.le.0.0)then
+            v_f(i,j)=0.0
+          else
+            uc2=sqrt((fy(j)-by(i))**2+(fx(j)-bx(i))**2)
+            cond1=cy1-cx1*(by(j)-fy(i))/(bx(j)-fx(i))
+            cond1=cond1+fx(i)*(by(j)-fy(i))/(bx(j)-fx(i))-fy(i)
+            if (cond1.ge.0.0)then
+              cs1=sqrt((fy(j)-fy(i))**2+(fx(j)-fx(i))**2)
+              cs2=sqrt((by(j)-by(i))**2+(bx(j)-bx(i))**2)
+              uc1=sqrt((by(j)-fy(i))**2+(bx(j)-fx(i))**2)
+              v_f(i,j)=0.5*(cs1+cs2-uc1-uc2)/ds(i)
+            else
+              uc1=sqrt((by(j)-cy1)**2+(bx(j)-cx1)**2)
+              uc1=uc1+sqrt((cy1-fy(i))**2+(fx(i)-cx1)**2)
+              cond2=cy1-cx1*(fy(j)-fy(i))/(fx(j)-fx(i))
+              cond2=cond2+fx(i)*(fy(j)-fy(i))/(fx(j)-fx(i))-fy(i)
+              if (cond2.lt.0.0)then
+                cs1=sqrt((fy(j)-cy1)**2+(fx(j)-cx1)**2)
+                cs1=cs1+sqrt((cy1-fy(i))**2+(cx1-fx(i))**2)
+              else
+                cs1=sqrt((fy(j)-fy(i))**2+(fx(j)-fx(i))**2)
+              endif
+              cond3=cy1-cx1*(by(j)-by(i))/(bx(j)-bx(i))
+              cond3=cond3+bx(i)*(by(j)-by(i))/(bx(j)-bx(i))-by(i)
+              if (cond3.lt.0.0) then
+                cs2=sqrt((by(j)-cy1)**2+(bx(j)-cx1)**2)
+                cs2=cs2+sqrt((cy1-by(i))**2+(cx1-bx(i))**2)
+              else
+                cs2=sqrt((by(j)-by(i))**2+(bx(j)-bx(i))**2)
+              endif
+              v_f(i,j)=0.5d0*(cs1+cs2-uc1-uc2)/dx2
+            endif
+          endif
+        enddo
+        enddo
+* Surface 1 with surface 20
+        do i=2,noc(1)-1
+        do j=noc(19)+1,noc(20)
+          cs1=sqrt((fy(j)-fy(i))**2+(fx(j)-fx(i))**2)
+          cs2=sqrt((by(j)-by(i))**2+(bx(j)-bx(i))**2)
+          uc1=sqrt((by(j)-fy(i))**2+(bx(j)-fx(i))**2)
+          uc2=sqrt((fy(j)-by(i))**2+(fx(j)-bx(i))**2)
+          v_f(i,j)=0.5*(cs1+cs2-uc1-uc2)/ds(i)
+        enddo
+        enddo
+      return
+      end
+*===================================*
+      subroutine self_vf
+      include 'input.in'
+        do i=1,noc(20)
+        do j=1,noc(20)
+* self pending for corner
+          v_f(i,j)=0.0
+        enddo
+        enddo
+      return
       end
 *===================================*
       subroutine location
@@ -14,7 +138,6 @@
         dy1=
         dy2=
         dy3=
-
 ***** Four edge co-ordinates of chips
         cx1=x4
         cy1=y1+y2
@@ -349,5 +472,11 @@
           endif
           fy(i)=0.0
         enddo
+* Surface1-to-20
+        do i=2,noc(20)
+          bx(i)=fx(i-1)
+          by(i)=fy(i-1)
+        enddo
       return
       end
+*===================================*
