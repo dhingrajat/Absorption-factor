@@ -556,34 +556,24 @@
       return
       end
 *===================================*
-Start from here
-*===================================*
       subroutine surface2
       include 'input.in'
-***** Surface 2 with corner point1
-      do i=noc(1)+1,noc(2)-1
-      o=i
-      bx1(1)=(o-noc(1)-0.5d0)*dx1
-      by1(1)=ycp1
-      fx2(1)=(o-noc(1)+0.5d0)*dx1
-      fy2(1)=ycp1
-      j=1
-      bx1(2)=(0.5d0)*dx1
-      by1(2)=0.d0
-      fx2(2)=0.d0
-      fy2(2)=(0.5d0)*dx2
-      cs1=sqrt((fy2(2)-fy2(1))**2.d0+(fx2(2)-fx2(1))**2.d0)
-      cs2=sqrt((by1(2)-by1(1))**2.d0+(bx1(2)-bx1(1))**2.d0)
-      uc1=sqrt((by1(2)-fy2(1))**2.d0+(bx1(2)-fx2(1))**2.d0)
-      uc2=sqrt((fy2(2)-by1(1))**2.d0+(fx2(2)-bx1(1))**2.d0)
-      v_f(i,j)=0.5d0*(cs1+cs2-uc1-uc2)/dx1
-      enddo
-***** Surface 2 with surface 3-18 and 19 partly
-      do i=noc(1)+1,noc(2)-1
-      do j=noc(2),noc(19)-noc(1)
-      v_f(i,j)=0.d0
-      enddo
-      enddo
+* Surface 2 with corner point1
+        do i=noc(1)+1,noc(2)-1
+           j=1
+          cs1=sqrt((fy(j)-fy(i))**2+(fx(j)-fx(i))**2)
+          cs2=sqrt((by(j)-by(i))**2+(bx(j)-bx(i))**2)
+          uc1=sqrt((by(j)-fy(i))**2+(bx(j)-fx(i))**2)
+          uc2=sqrt((fy(j)-by(i))**2+(fx(j)-bx(i))**2)
+          v_f(i,j)=0.5*(cs1+cs2-uc1-uc2)/ds(i)
+        enddo
+* Surface 2 with surface 3-18 and 19 partly
+        do i=noc(1)+1,noc(2)-1
+        do j=noc(2),noc(19)-noc(1)
+          v_f(i,j)=0.d0
+        enddo
+        enddo
+*???????
 ***** Surface 2 with surface 19 point number noc(19)-noc(1)+1
       do i=noc(1)+1,noc(2)-1
       o=i
