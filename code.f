@@ -24,6 +24,30 @@
         call surface18
         call surface19
         call surface20
+
+        call corner1
+        call corner2
+        call corner3
+        call corner4
+        call corner5
+        call corner6
+        call corner7
+        call corner8
+        call corner9
+        call corner10
+        call corner11
+        call corner12
+        call corner13
+        call corner14
+        call corner15
+        call corner16
+        call corner17
+        call corner18
+        call corner19
+        call corner20
+
+        call output
+        call ab_factor
       stop
       end
 *===================================*
@@ -3890,7 +3914,6 @@
            j=noc(4)
           v_f(i,j)=0.0
         enddo
-Start
 * Surface 20 with corner noc(5)
         do i=noc(19)+1,noc(20)
            j=noc(5)
@@ -4571,7 +4594,7 @@ Start
 *====================================*
       subroutine corner4
       include 'input.in'
-* i=noc(3) till noc(3)-1
+* i=noc(3) till noc(20)
            i=noc(3)
         do j=1,noc(20)
           v_f(i,j)=v_f(j,i)*ds(j)/ds(i)
@@ -4616,7 +4639,7 @@ Start
           cond2=cond2+fx(i)*(fy(j)-fy(i))/(fx(j)-fx(i))-fy(i)
           if (cond2.lt.0.0)then
             cs1=sqrt((fy(j)-cy3)**2+(fx(j)-cx3)**2)
-            cs1=cs1+sqrt((cy3-fy2(1))**2+(cx3-fx(i))**2)
+            cs1=cs1+sqrt((cy3-fy(i))**2+(cx3-fx(i))**2)
           else
             cs1=sqrt((fy(j)-fy(i))**2+(fx(j)-fx(i))**2)
           endif
@@ -4797,7 +4820,7 @@ Start
         do j=noc(6)+1,noc(17)
           v_f(i,j)=0.0
         enddo
-* i=noc(5) with surface 18
+* i=noc(5) with i=noc(18)
            i=noc(5)
            j=noc(18)
           cond=cy3-cx3*(fy(j)-by(i))/(fx(j)-bx(i))
@@ -4823,26 +4846,41 @@ Start
 * i=noc(5) with i=noc(19)
            i=noc(5)
            j=noc(19)
-        cond=cy2-cx2*(by(j)-fy(i))/(bx(j)-fx(i))
-        cond=cond+fx(i)*(by(j)-fy(i))/(bx(j)-fx(i))-fy(i)
-        if (cond.ge.0.0)then
-          v_f(i,j)=0.0
-        else
-          uc1=sqrt((by(j)-fy(i))**2+(bx(j)-fx(i))**2)
-          cond1=cy2-cx2*(fy(j)-fy(i))/(fx(j)-fx(i))
-          cond1=cond1+fx(i)*(fy(j)-fy(i))/(fx(j)-fx(i))-fy(i)
-          if (cond2.gt.0.0)then
-            cs1=sqrt((fy(j)-cy2)**2+(fx(j)-cx2)**2)
-            cs1=cs1+sqrt((cy2-fy(i))**2+(cx2-fx(i))**2)
+          cond=cy2-cx2*(by(j)-fy(i))/(bx(j)-fx(i))
+          cond=cond+fx(i)*(by(j)-fy(i))/(bx(j)-fx(i))-fy(i)
+          if (cond.ge.0.0)then
+            v_f(i,j)=0.0
           else
-            cs1=sqrt((fy(j)-fy(i))**2+(fx(j)-fx(i))**2)
+            uc1=sqrt((by(j)-fy(i))**2+(bx(j)-fx(i))**2)
+            cond1=cy2-cx2*(fy(j)-by(i))/(fx(j)-bx(i))
+            cond1=cond1+bx(i)*(fy(j)-by(i))/(fx(j)-bx(i))-by(i)
+            if (cond1.le.0.0)then
+              cs1=sqrt((fy(j)-fy(i))**2+(fx(j)-fx(i))**2)
+              cs2=sqrt((by(j)-by(i))**2+(bx(j)-bx(i))**2)
+              uc2=sqrt((fy(j)-by(i))**2+(fx(j)-bx(i))**2)
+              v_f(i,j)=0.5*(cs1+cs2-uc1-uc2)/ds(i)
+            else
+              uc2=sqrt((fy(j)-cy2)**2+(fx(j)-cx2)**2)
+              uc2=uc2+sqrt((cy2-by(i))**2+(cx2-bx(i))**2)
+              cond2=cy2-cx2*(fy(j)-fy(i))/(fx(j)-fx(i))
+              cond2=cond2+fx(i)*(fy(j)-fy(i))/(fx(j)-fx(i))-fy(i)
+              if (cond2.gt.0.0)then
+                cs1=sqrt((fy(j)-cy2)**2+(fx(j)-cx2)**2)
+                cs1=cs1+sqrt((cy2-fy(i))**2+(cx2-fx(i))**2)
+              else
+                cs1=sqrt((fy(j)-fy(i))**2+(fx(j)-fx(i))**2)
+              endif
+              cond3=cy2-cx2*(by(j)-by(i))/(bx(j)-bx(i))
+              cond3=cond3+bx(i)*(by(j)-by(i))/(bx(j)-bx(i))-by(i)
+              if (cond3.gt.0.0)then
+                cs2=sqrt((by(j)-cy2)**2+(bx(j)-cx2)**2)
+                cs2=cs2+sqrt((cy2-by(i))**2+(cx2-bx(i))**2)
+              else
+                cs2=sqrt((by(j)-by(i))**2+(bx(j)-bx(i))**2)
+              endif
+              v_f(i,j)=0.5*(cs1+cs2-uc1-uc2)/ds(i)
+            endif
           endif
-          cs2=sqrt((by(j)-cy2)**2+(bx(j)-cx2)**2)
-          cs2=cs2+sqrt((cy2-by(i))**2+(cx2-bx(i))**2)
-          uc2=sqrt((fy(j)-cy2)**2+(fx(j)-cx2)**2)
-          uc2=uc2+sqrt((cy2-by(i))**2+(cx2-bx(i))**2)
-          v_f(i,j)=0.5*(cs1+cs2-uc1-uc2)/ds(i)
-        endif
 * i=noc(5) with i=noc(5)
            i=noc(5)
            j=noc(5)
@@ -4860,241 +4898,1167 @@ Start
         enddo
 * i=noc(6) with i=noc(3) to noc(6)-1
            i=noc(6)
-        do j=noc(3),noc(6)
+        do j=noc(3),noc(6)-1
           v_f(i,j)=v_f(j,i)*ds(j)/ds(i)
         enddo
-
-Start
-
-* i=noc(6) with surface 4
-      i=noc(6)
-      do j=noc(3)+1,noc(4)-1
-      v_f(i,j)=v_f(j,i)*dx1/(0.5d0*(dx1+dx2))
-      enddo
-***** i=noc(6) with i=noc(4)
-      i=noc(6)
-      j=noc(4)
-      v_f(i,j)=v_f(j,i)
-***** i=noc(6) with surface 5
-      i=noc(6)
-      do j=noc(4)+1,noc(5)-1
-      v_f(i,j)=v_f(j,i)*dx2/(0.5d0*(dx1+dx2))
-      enddo
-***** i=noc(6) with i=noc(5)
-      i=noc(6)
-      j=noc(5)
-      v_f(i,j)=v_f(j,i)
-***** i=noc(6) with surface 6
-      i=noc(6)
-      do j=noc(5)+1,noc(6)-1
-      v_f(i,j)=0.d0
-      enddo
-***** i=noc(6) with surface 7-to-17
-      i=noc(6)
-      do j=noc(6)+1,noc(17)
-      v_f(i,j)=0.d0
-      enddo
-***** i=noc(6) with surface 18
-      i=noc(6)
-      do j=noc(17)+1,noc(18)-1
-      v_f(i,j)=v_f(j,i)*dx1/(0.5d0*(dx1+dx2))
-      enddo
-***** i=noc(6) with i=noc(18)
-      i=noc(6)
-      bx1(1)=p3
-      by1(1)=q3
-      fx2(1)=xcp
-      fy2(1)=ycp3+(0.5d0)*dx2
-      j=noc(18)
-      bx1(2)=trv-(0.5d0)*dx1
-      by1(2)=axl
-      fx2(2)=trv
-      fy2(2)=axl-(0.5d0)*dx2
-      cs1=sqrt((fy2(2)-fy2(1))**2.d0+(fx2(2)-fx2(1))**2.d0)
-      cs2=sqrt((by1(2)-by1(1))**2.d0+(bx1(2)-bx1(1))**2.d0)
-      uc1=sqrt((by1(2)-fy2(1))**2.d0+(bx1(2)-fx2(1))**2.d0)
-      uc2=sqrt((fy2(2)-by1(1))**2.d0+(fx2(2)-bx1(1))**2.d0)
-      v_f(i,j)=0.5d0*(cs1+cs2-uc1-uc2)/(0.5d0*(dx1+dx2))
-***** i=noc(6) with surface 19
-      i=noc(6)
-      do j=noc(18)+1,noc(19)-1
-      v_f(i,j)=v_f(j,i)*dx2/(0.5d0*(dx1+dx2))
-      enddo
-***** i=noc(6) with i=noc(19)
-      i=noc(6)
-      bx1(1)=xcp-(0.5d0)*dx1
-      by1(1)=ycp3
-      fx2(1)=xcp
-      fy2(1)=ycp3+(0.5d0)*dx2
-      j=noc(19)
-      bx1(2)=trv
-      by1(2)=(0.5d0)*dx2
-      fx2(2)=trv-(0.5d0)*dx1
-      fy2(2)=0.d0
-      cs1=sqrt((fy2(2)-fy2(1))**2.d0+(fx2(2)-fx2(1))**2.d0)
-      uc1=sqrt((by1(2)-fy2(1))**2.d0+(bx1(2)-fx2(1))**2.d0)
-      cond1 = q2-p2*(fy2(2)-by1(1))/(fx2(2)-bx1(1))
-      cond1 = cond1+bx1(1)*(fy2(2)-by1(1))/(fx2(2)-bx1(1))-by1(1)
-      if (cond1.le.0.d0) then
-      cs2=sqrt((by1(2)-by1(1))**2.d0+(bx1(2)-bx1(1))**2.d0)
-      uc2=sqrt((fy2(2)-by1(1))**2.d0+(fx2(2)-bx1(1))**2.d0)
-      v_f(i,j)=0.5d0*(cs1+cs2-uc1-uc2)/(0.5d0*(dx1+dx2))
-      else
-      uc2=sqrt((fy2(2)-q2)**2.d0+(fx2(2)-p2)**2.d0)
-      uc2=uc2+sqrt((q2-by1(1))**2.d0+(p2-bx1(1))**2.d0)
-      cond3 = q2-p2*(by1(2)-by1(1))/(bx1(2)-bx1(1))
-      cond3 = cond3+bx1(1)*(by1(2)-by1(1))/(bx1(2)-bx1(1))-by1(1)
-      if (cond3.gt.0.d0) then
-      cs2=sqrt((by1(2)-q2)**2.d0+(bx1(2)-p2)**2.d0)
-      cs2=cs2+sqrt((q2-by1(1))**2.d0+(p2-bx1(1))**2.d0)
-      else
-      cs2=sqrt((by1(2)-by1(1))**2.d0+(bx1(2)-bx1(1))**2.d0)
-      endif
-      v_f(i,j)=0.5d0*(cs1+cs2-uc1-uc2)/(0.5d0*(dx1+dx2))
-      endif
-***** i=noc(6) with surface 12
-      i=noc(6)
-      do j=noc(19)+1,noc(20)
-      v_f(i,j)=v_f(j,i)*dx1/(0.5d0*(dx1+dx2))
-      enddo
+* i=noc(6) with i=noc(6)
+           i=noc(6)
+           j=noc(6)
+          v_f(i,j)=0.0
+* i=noc(6) with surface 7-to-17
+           i=noc(6)
+        do j=noc(6)+1,noc(17)
+          v_f(i,j)=0.0
+        enddo
+* i=noc(6) with surface 17 to noc(20)
+           i=noc(6)
+        do j=noc(17)+1,noc(20)
+          v_f(i,j)=v_f(j,i)*ds(j)/ds(i)
+        enddo
+* i=noc(6) with i=noc(18)
+           i=noc(6)
+           j=noc(18)
+          cs1=sqrt((fy(j)-fy(i))**2+(fx(j)-fx(i))**2)
+          cs2=sqrt((by(j)-cy3)**2+(bx(j)-cx3)**2)
+          uc1=sqrt((by(j)-fy(i))**2+(bx(j)-fx(i))**2)
+          uc2=sqrt((fy(j)-cy3)**2+(fx(j)-cx3)**2)
+          v_f(i,j)=0.5*(cs1+cs2-uc1-uc2)/ds(i)
+* i=noc(6) with i=noc(19)
+           i=noc(6)
+           j=noc(19)
+          cs1=sqrt((fy(j)-fy(i))**2+(fx(j)-fx(i))**2)
+          uc1=sqrt((by(j)-fy(i))**2+(bx(j)-fx(i))**2)
+          cond1=cy2-cx2*(fy(j)-by(i))/(fx(j)-bx(i))
+          cond1=cond1+bx(i)*(fy(j)-by(i))/(fx(j)-bx(i))-by(i)
+          if (cond1.le.0.0)then
+            cs2=sqrt((by(j)-by(i))**2+(bx(j)-bx(i))**2)
+            uc2=sqrt((fy(j)-by(i))**2+(fx(j)-bx(i))**2)
+            v_f(i,j)=0.5*(cs1+cs2-uc1-uc2)/ds(i)
+          else
+            uc2=sqrt((fy(j)-cy2)**2+(fx(j)-cx2)**2)
+            uc2=uc2+sqrt((cy2-by(i))**2+(cx2-bx(i))**2)
+            cond3=cy2-cx2*(by(j)-by(i))/(bx(j)-bx(i))
+            cond3=cond3+bx(i)*(by(j)-by(i))/(bx(j)-bx(i))-by(i)
+            if (cond3.gt.0.0)then
+              cs2=sqrt((by(j)-cy2)**2+(bx(j)-cx2)**2)
+              cs2=cs2+sqrt((cy2-by(i))**2+(cx2-bx(i))**2)
+            else
+              cs2=sqrt((by(j)-by(i))**2+(bx(j)-bx(i))**2)
+            endif
+            v_f(i,j)=0.5*(cs1+cs2-uc1-uc2)/ds(i)
+          endif
       return
       end
 *====================================*
       subroutine corner8
       include 'input.in'
-***** i=noc(7) till noc(7)-1
-      i=noc(7)
-      do j=1,noc(7)-1
-      v_f(i,j)=0.d0
-      enddo
-***** i=noc(7) with surface 8
-      i=noc(7)
-      do j=noc(7)+1,noc(8)-1
-      v_f(i,j)=0.d0
-      enddo
-***** i=noc(7) with i=noc(8)
-      i=noc(7)
-      bx1(1)=p4
-      by1(1)=q4
-      fx2(1)=xcp-(0.5d0)*dx1
-      fy2(1)=ycp3+ycp2-ycp1
-      j=noc(8)
-      bx1(2)=(0.5d0)*dx1
-      by1(2)=ycp3+ycp2-ycp1
-      fx2(2)=0.d0
-      fy2(2)=ycp3+ycp2-ycp1+(0.5d0)*dx2
-      cs1=sqrt((fy2(2)-fy2(1))**2.d0+(fx2(2)-fx2(1))**2.d0)
-      cs2=sqrt((by1(2)-by1(1))**2.d0+(bx1(2)-bx1(1))**2.d0)
-      uc1=sqrt((by1(2)-fy2(1))**2.d0+(bx1(2)-fx2(1))**2.d0)
-      uc2=sqrt((fy2(2)-by1(1))**2.d0+(fx2(2)-bx1(1))**2.d0)
-      v_f(i,j)=0.5d0*(cs1+cs2-uc1-uc2)/(0.5d0*(dx1+dx2))
-***** i=noc(7) with surface 9
-      i=noc(7)
-      do j=noc(8)+1,noc(9)-1
-      v_f(i,j)=v_f(j,i)*dx2/(0.5d0*(dx1+dx2))
-      enddo
-***** i=noc(7) with i=noc(9)
-      i=noc(7)
-      bx1(1)=p4
-      by1(1)=q4
-      fx2(1)=xcp-(0.5d0)*dx1
-      fy2(1)=ycp3+ycp2-ycp1
-      j=noc(9)
-      bx1(2)=0.d0
-      by1(2)=2.d0*ycp3-ycp1-(0.5d0)*dx2
-      fx2(2)=(0.5d0)*dx1
-      fy2(2)=2.d0*ycp3-ycp1
-      cs1=sqrt((fy2(2)-fy2(1))**2.d0+(fx2(2)-fx2(1))**2.d0)
-      cs2=sqrt((by1(2)-by1(1))**2.d0+(bx1(2)-bx1(1))**2.d0)
-      uc1=sqrt((by1(2)-fy2(1))**2.d0+(bx1(2)-fx2(1))**2.d0)
-      uc2=sqrt((fy2(2)-by1(1))**2.d0+(fx2(2)-bx1(1))**2.d0)
-      v_f(i,j)=0.5d0*(cs1+cs2-uc1-uc2)/(0.5d0*(dx1+dx2))
-***** i=noc(7) with surface 10
-      i=noc(7)
-      do j=noc(9)+1,noc(10)-1
-      v_f(i,j)=v_f(j,i)*dx1/(0.5d0*(dx1+dx2))
-      enddo
-***** i=noc(7) with i=noc(10)
-      i=noc(7)
-      bx1(1)=p4
-      by1(1)=q4
-      fx2(1)=xcp-(0.5d0)*dx1
-      fy2(1)=ycp3+ycp2-ycp1
-      j=noc(10)
-      bx1(2)=xcp-(0.5d0)*dx1
-      by1(2)=2.d0*ycp3-ycp1
-      fx2(2)=p5
-      fy2(2)=q5
-      cs1=sqrt((fy2(2)-fy2(1))**2.d0+(fx2(2)-fx2(1))**2.d0)
-      cs2=sqrt((by1(2)-by1(1))**2.d0+(bx1(2)-bx1(1))**2.d0)
-      uc1=sqrt((by1(2)-fy2(1))**2.d0+(bx1(2)-fx2(1))**2.d0)
-      uc2=sqrt((fy2(2)-by1(1))**2.d0+(fx2(2)-bx1(1))**2.d0)
-      v_f(i,j)=0.5d0*(cs1+cs2-uc1-uc2)/(0.5d0*(dx1+dx2))
-***** i=noc(7) with surface 11-to-17
-      i=noc(7)
-      do j=noc(10)+1,noc(17)
-      v_f(i,j)=0.d0
-      enddo
-***** i=noc(7) with surface 18
-      i=noc(7)
-      do j=noc(17)+1,noc(18)-1
-      v_f(i,j)=v_f(j,i)*dx1/(0.5d0*(dx1+dx2))
-      enddo
-***** i=noc(7) with i=noc(18)
-      i=noc(7)
-      bx1(1)=xcp
-      by1(1)=ycp3+ycp2-ycp1-(0.5d0)*dx2
-      fx2(1)=xcp-(0.5d0)*dx1
-      fy2(1)=ycp3+ycp2-ycp1
-      j=noc(18)
-      bx1(2)=trv-(0.5d0)*dx1
-      by1(2)=axl
-      fx2(2)=trv
-      fy2(2)=axl-(0.5d0)*dx2
-      cs2=sqrt((by1(2)-by1(1))**2.d0+(bx1(2)-bx1(1))**2.d0)
-      uc2=sqrt((fy2(2)-by1(1))**2.d0+(fx2(2)-bx1(1))**2.d0)
-      cond2 = q5-p5*(fy2(2)-fy2(1))/(fx2(2)-fx2(1))
-      cond2 = cond2+fx2(1)*(fy2(2)-fy2(1))/(fx2(2)-fx2(1))-fy2(1)
-      if (cond2.lt.0.d0) then
-      cs1=sqrt((fy2(2)-q5)**2.d0+(fx2(2)-p5)**2.d0)
-      cs1=cs1+sqrt((q5-fy2(1))**2.d0+(p5-fx2(1))**2.d0)
-      else
-      cs1=sqrt((fy2(2)-fy2(1))**2.d0+(fx2(2)-fx2(1))**2.d0)
-      endif
-      cond1 = q5-p5*(by1(2)-fy2(1))/(bx1(2)-fx2(1))
-      cond1 = cond1+fx2(1)*(by1(2)-fy2(1))/(bx1(2)-fx2(1))-fy2(1)
-      if (cond1.lt.0.d0) then
-      uc1=sqrt((by1(2)-q5)**2.d0+(bx1(2)-p5)**2.d0)
-      uc1=uc1+sqrt((q5-fy2(1))**2.d0+(p5-fx2(1))**2.d0)
-      else
-      uc1=sqrt((by1(2)-fy2(1))**2.d0+(bx1(2)-fx2(1))**2.d0)
-      endif
-      v_f(i,j)=0.5d0*(cs1+cs2-uc1-uc2)/(0.5d0*(dx1+dx2))
-***** i=noc(7) with surface 19
-      i=noc(7)
-      do j=noc(18)+1,noc(19)-1
-      v_f(i,j)=v_f(j,i)*dx2/(0.5d0*(dx1+dx2))
-      enddo
-***** i=noc(7) with i=noc(19)
-      i=noc(7)
-      bx1(1)=xcp
-      by1(1)=ycp3+ycp2-ycp1-(0.5d0)*dx2
-      fx2(1)=p4
-      fy2(1)=q4
-      j=noc(19)
-      bx1(2)=trv
-      by1(2)=(0.5d0)*dx2
-      fx2(2)=trv-(0.5d0)*dx1
-      fy2(2)=0.d0
-      cs1=sqrt((fy2(2)-fy2(1))**2.d0+(fx2(2)-fx2(1))**2.d0)
-      cs2=sqrt((by1(2)-by1(1))**2.d0+(bx1(2)-bx1(1))**2.d0)
-      uc1=sqrt((by1(2)-fy2(1))**2.d0+(bx1(2)-fx2(1))**2.d0)
-      uc2=sqrt((fy2(2)-by1(1))**2.d0+(fx2(2)-bx1(1))**2.d0)
-      v_f(i,j)=0.5d0*(cs1+cs2-uc1-uc2)/(0.5d0*(dx1+dx2))
-***** i=noc(7) with surface 12
-      i=noc(7)
-      do j=noc(19)+1,noc(20)
-      v_f(i,j)=v_f(j,i)*dx1/(0.5d0*(dx1+dx2))
-      enddo
+* i=noc(7) till noc(7)-1
+           i=noc(7)
+        do j=1,noc(20)
+          v_f(i,j)=v_f(j,i)*ds(j)/ds(i)
+        enddo
+* i=noc(7) with i=noc(8)
+           i=noc(7)
+           j=noc(8)
+          cs1=sqrt((fy(j)-fy(i))**2+(fx(j)-fx(i))**2)
+          cs2=sqrt((by(j)-cy4)**2+(bx(j)-cx4)**2)
+          uc1=sqrt((by(j)-fy(i))**2+(bx(j)-fx(i))**2)
+          uc2=sqrt((fy(j)-cy4)**2+(fx(j)-cx4)**2)
+          v_f(i,j)=0.5*(cs1+cs2-uc1-uc2)/ds(i)
+* i=noc(7) with i=noc(9)
+           i=noc(7)
+           j=noc(9)
+          cs1=sqrt((fy(j)-fy(i))**2+(fx(j)-fx(i))**2)
+          cs2=sqrt((by(j)-cy4)**2+(bx(j)-cx4)**2)
+          uc1=sqrt((by(j)-fy(i))**2+(bx(j)-fx(i))**2)
+          uc2=sqrt((fy(j)-cy4)**2+(fx(j)-cx4)**2)
+          v_f(i,j)=0.5*(cs1+cs2-uc1-uc2)/ds(i)
+* i=noc(7) with i=noc(10)
+           i=noc(7)
+           j=noc(10)
+          cs1=sqrt((cy5-fy(i))**2+(cx5-fx(i))**2)
+          cs1=cs1+sqrt((fy(j)-cy5)**2+(fx(j)-cx5)**2)
+          cs2=sqrt((cy4-by(i))**2+(cx4-bx(i))**2)
+          cs2=cs2+sqrt((by(j)-cy4)**2+(bx(j)-cx4)**2)
+          uc1=sqrt((by(j)-fy(i))**2+(bx(j)-fx(i))**2)
+          uc2=sqrt((fy(j)-by(i))**2+(fx(j)-bx(i))**2)
+          v_f(i,j)=0.5*(cs1+cs2-uc1-uc2)/ds(i)
+* i=noc(7) with surface 11-to-17
+           i=noc(7)
+        do j=noc(10)+1,noc(17)
+          v_f(i,j)=0.0
+        enddo
+* i=noc(7) with i=noc(18)
+           i=noc(7)
+           j=noc(18)
+          cs2=sqrt((by(j)-by(i))**2+(bx(j)-bx(i))**2)
+          uc2=sqrt((fy(j)-by(i))**2+(fx(j)-bx(i))**2)
+          cond2=cy5-cx5*(fy(j)-fy(i))/(fx(j)-fx(i))
+          cond2=cond2+fx(i)*(fy(j)-fy(i))/(fx(j)-fx(i))-fy(i)
+          if (cond2.lt.0.0)then
+            cs1=sqrt((fy(j)-cy5)**2+(fx(j)-cx5)**2)
+            cs1=cs1+sqrt((cy5-fy(i))**2+(cx5-fx(i))**2)
+          else
+            cs1=sqrt((fy(j)-fy(i))**2+(fx(j)-fx(i))**2)
+          endif
+          cond1=cy5-cx5*(by(j)-fy(i))/(bx(j)-fx(i))
+          cond1=cond1+fx(i)*(by(j)-fy(i))/(bx(j)-fx(i))-fy(i)
+          if (cond1.lt.0.0)then
+            uc1=sqrt((by(j)-cy5)**2+(bx(j)-cx5)**2)
+            uc1=uc1+sqrt((cy5-fy(i))**2.d0+(cx5-fx(i))**2)
+          else
+            uc1=sqrt((by(j)-fy(i))**2+(bx(j)-fx(i))**2)
+          endif
+          v_f(i,j)=0.5*(cs1+cs2-uc1-uc2)/ds(i)
+* i=noc(7) with i=noc(19)
+           i=noc(7)
+           j=noc(19)
+          cs1=sqrt((fy(j)-cy4)**2+(fx(j)-cx4)**2)
+          cs2=sqrt((by(j)-by(i))**2+(bx(j)-bx(i))**2)
+          uc1=sqrt((by(j)-cy4)**2+(bx(j)-cx4)**2)
+          uc2=sqrt((fy(j)-by(i))**2+(fx(j)-bx(i))**2)
+          v_f(i,j)=0.5*(cs1+cs2-uc1-uc2)/ds(i)
       return
       end
+*====================================*
+      subroutine corner9
+      include 'input.in'
+* i=noc(8) with till noc(7)-1
+           i=noc(8)
+        do j=1,noc(7)-1
+          v_f(i,j)=0.0
+        enddo
+* i=noc(8) with surface 8
+           i=noc(8)
+        do j=noc(7),noc(8)-1
+          v_f(i,j)=v_f(j,i)*ds(j)/ds(i)
+        enddo
+* i=noc(8) with i=noc(8)
+           i=noc(8)
+           j=noc(8)
+          cs1=sqrt((fy(i)-by(i))**2+(fx(i)-bx(i))**2)
+          v_f(i,j)=1.0-(cs1/ds(i))
+* i=noc(8) with surface 9 to all
+           i=noc(8)
+        do j=noc(8)+1,noc(20)
+          v_f(i,j)=v_f(j,i)*ds(j)/ds(i)
+        enddo
+* i=noc(8) with i=noc(9)
+           i=noc(8)
+           j=noc(9)
+          cs1=sqrt((fy(j)-fy(i))**2+(fx(j)-fx(i))**2)
+          cs2=sqrt((by(j)-by(i))**2+(bx(j)-bx(i))**2)
+          uc1=sqrt((by(j)-fy(i))**2+(bx(j)-fx(i))**2)
+          uc2=sqrt((fy(j)-by(i))**2+(fx(j)-bx(i))**2)
+          v_f(i,j)=0.5*(cs1+cs2-uc1-uc2)/ds(i)
+* i=noc(8) with i=noc(10)
+           i=noc(8)
+           j=noc(10)
+          cs1=sqrt((cy5-fy(i))**2+(cx5-fx(i))**2)
+          cs2=sqrt((by(j)-by(i))**2+(bx(j)-bx(i))**2)
+          uc1=sqrt((by(j)-fy(i))**2+(bx(j)-fx(i))**2)
+          uc2=sqrt((cy5-by(i))**2+(cx5-bx(i))**2)
+          v_f(i,j)=0.5*(cs1+cs2-uc1-uc2)/ds(i)
+* i=noc(8) with surface 11-to-17
+           i=noc(8)
+        do j=noc(10)+1,noc(17)
+          v_f(i,j)=0.0
+        enddo
+* i=noc(8) with i=noc(18)
+           i=noc(8)
+           j=noc(18)
+          cond=cy5-cx5*(fy(j)-by(i))/(fx(j)-bx(i))
+          cond=cond+bx(i)*(fy(j)-by(i))/(fx(j)-bx(i))-by(i)
+          if (cond.le.0.0)then
+            v_f(i,j)=0.0
+          else
+            uc2=sqrt((fy(j)-by(i))**2+(fx(j)-bx(i))**2)
+            cond1=cy5-cx5*(by(j)-fy(i))/(bx(j)-fx(i))
+            cond1=cond1+fx(i)*(by(j)-fy(i))/(bx(j)-fx(i))-fy(i)
+            if (cond1.ge.0.0)then
+              cs1=sqrt((fy(j)-fy(i))**2+(fx(j)-fx(i))**2)
+              cs2=sqrt((by(j)-by(i))**2+(bx(j)-bx(i))**2)
+              uc1=sqrt((by(j)-fy(i))**2+(bx(j)-fx(i))**2)
+              v_f(i,j)=0.5*(cs1+cs2-uc1-uc2)/ds(i)
+            else
+              uc1=sqrt((by(j)-cy5)**2+(bx(j)-cx5)**2)
+              uc1=uc1+sqrt((cy5-fy(i))**2+(cx5-fx(i))**2)
+              cond2=cy5-cx5*(fy(j)-fy(i))/(fx(j)-fx(i))
+              cond2=cond2+fx(i)*(fy(j)-fy(i))/(fx(j)-fx(i))-fy(i)
+              if (cond2.lt.0.0)then
+                cs1=sqrt((fy(j)-cy5)**2+(fx(j)-cx5)**2)
+                cs1=cs1+sqrt((cy5-fy(i))**2+(cx5-fx(i))**2)
+              else
+                cs1=sqrt((fy(j)-fy(i))**2+(fx(j)-fx(i))**2)
+              endif
+              cond3=cy5-cx5*(by(j)-by(i))/(bx(j)-bx(i))
+              cond3=cond3+bx(i)*(by(j)-by(i))/(bx(j)-bx(i))-by(i)
+              if (cond3.lt.0.0)then
+                cs2=sqrt((by(j)-cy5)**2+(bx(j)-cx5)**2)
+                cs2=cs2+sqrt((cy5-by(i))**2+(cx5-bx(i))**2)
+              else
+                cs2=sqrt((by(j)-by(i))**2+(bx(j)-bx(i))**2)
+              endif
+              v_f(i,j)=0.5*(cs1+cs2-uc1-uc2)/ds(i)
+            endif
+          endif
+* i=noc(8) with i=noc(19)
+           i=noc(8)
+           j=noc(19)
+          cond=cy4-cx4*(by(j)-fy(i))/(bx(j)-fx(i))
+          cond=cond+fx(i)*(by(j)-fy(i))/(bx(j)-fx(i))-fy(i)
+        if (cond.ge.0.0)then
+          v_f(i,j)=0.0
+        else
+          uc1=sqrt((by(j)-fy(i))**2+(bx(j)-fx(i))**2)
+          cond1=cy4-cx4*(fy(j)-by(i))/(fx(j)-bx(i))
+          cond1=cond1+bx(i)*(fy(j)-by(i))/(fx(j)-bx(i))-by(i)
+          if (cond1.le.0.0)then
+            cs1=sqrt((fy(j)-fy(i))**2+(fx(j)-fx(i))**2)
+            cs2=sqrt((by(j)-by(i))**2+(bx(j)-bx(i))**2)
+            uc2=sqrt((fy(j)-by(i))**2+(fx(j)-bx(i))**2)
+            v_f(i,j)=0.5*(cs1+cs2-uc1-uc2)/ds(i)
+          else
+            uc2=sqrt((fy(j)-cy4)**2+(fx(j)-cx4)**2)
+            uc2=uc2+sqrt((cy4-by(i))**2+(cx4-bx(i))**2)
+            cond2=cy4-cx4*(fy(j)-fy(i))/(fx(j)-fx(i))
+            cond2=cond2+fx(i)*(fy(j)-fy(i))/(fx(j)-fx(i))-fy(i)
+            if (cond2.gt.0.0)then
+              cs1=sqrt((fy(j)-cy4)**2+(fx(j)-cx4)**2)
+              cs1=cs1+sqrt((cy4-fy(i))**2+(cx4-fx(i))**2)
+            else
+              cs1=sqrt((fy(j)-fy(i))**2+(fx(j)-fx(i))**2)
+            endif
+            cond3=cy4-cx4*(by(j)-by(i))/(bx(j)-bx(i))
+            cond3=cond3+bx(i)*(by(j)-by(i))/(bx(j)-bx(i))-by(i)
+            if (cond3.gt.0.0)then
+              cs2=sqrt((by(j)-cy4)**2+(bx(j)-cx4)**2)
+              cs2=cs2+sqrt((cy4-by(i))**2+(cx4-bx(i))**2)
+            else
+              cs2=sqrt((by(j)-by(i))**2+(bx(j)-bx(i))**2)
+            endif
+            v_f(i,j)=0.5*(cs1+cs2-uc1-uc2)/ds(i)
+          endif
+        endif
+      return
+      end
+*====================================*
+      subroutine corner10
+      include 'input.in'
+* i=noc(9) with till noc(7)-1
+           i=noc(9)
+        do j=1,noc(7)-1
+          v_f(i,j)=0.0
+        enddo
+* i=noc(9) with corner i=noc(7)
+           i=noc(9)
+        do j=noc(7),noc(9)-1
+          v_f(i,j)=v_f(j,i)*ds(j)/ds(i)
+        enddo
+* i=noc(9) with i=noc(9)
+           i=noc(9)
+           j=noc(9)
+          cs1=sqrt((fy(i)-by(i))**2+(fx(i)-bx(i))**2)
+          v_f(i,j)=1.0-(cs1/ds(i))
+* i=noc(9) with surface 10
+           i=noc(9)
+        do j=noc(9)+1,noc(20)
+          v_f(i,j)=v_f(j,i)*ds(j)/ds(i)
+        enddo
+* i=noc(9) with i=noc(10)
+           i=noc(9)
+           j=noc(10)
+          cs1=sqrt((cy6-fy(i))**2+(cx6-fx(i))**2)
+          cs2=sqrt((by(j)-by(i))**2+(bx(j)-bx(i))**2)
+          uc1=sqrt((by(j)-fy(i))**2+(bx(j)-fx(i))**2)
+          uc2=sqrt((cy6-by(i))**2+(cx6-bx(i))**2)
+          v_f(i,j)=0.5*(cs1+cs2-uc1-uc2)/ds(i)
+* i=noc(9) with surface 11-to-17
+          i=noc(9)
+        do j=noc(10)+1,noc(17)
+          v_f(i,j)=0.0
+        enddo
+* i=noc(9) with i=noc(18)
+           i=noc(9)
+           j=noc(18)
+          cond=cy5-cx5*(fy(j)-by(i))/(fx(j)-bx(i))
+          cond=cond+bx(i)*(fy(j)-by(i))/(fx(j)-bx(i))-by(i)
+          if (cond.le.0.0)then
+            v_f(i,j)=0.0
+          else
+            uc2=sqrt((fy(j)-by(i))**2+(fx(j)-bx(i))**2)
+            cond3=cy5-cx5*(by(j)-by(i))/(bx(j)-bx(i))
+            cond3=cond3+bx(i)*(by(j)-by(i))/(bx(j)-bx(i))-by(i)
+            if (cond3.lt.0.0)then
+              cs2=sqrt((by(j)-cy5)**2+(bx(j)-cx5)**2)
+              cs2=cs2+sqrt((cy5-by(i))**2+(cx5-bx(i))**2)
+            else
+              cs2=sqrt((by(j)-by(i))**2+(bx(j)-bx(i))**2)
+            endif
+            uc1=sqrt((by(j)-cy5)**2+(bx(j)-cx5)**2)
+            uc1=uc1+sqrt((cy5-fy(i))**2+(fx(i)-cx5)**2)
+            cs1=sqrt((fy(j)-cy5)**2+(fx(j)-cx5)**2)
+            cs1=cs1+sqrt((cy5-fy(i))**2+(cx5-fx(i))**2)
+            v_f(i,j)=0.5*(cs1+cs2-uc1-uc2)/ds(i)
+          endif
+* i=noc(9) with i=noc(19)
+           i=noc(9)
+           j=noc(19)
+          cond=cy4-cx4*(by(j)-fy(i))/(bx(j)-fx(i))
+          cond=cond+fx(i)*(by(j)-fy(i))/(bx(j)-fx(i))-fy(i)
+          if (cond.ge.0.0)then
+            v_f(i,j)=0.0
+          else
+            uc1=sqrt((by(j)-fy(i))**2+(bx(j)-fx(i))**2)
+            cond1=cy4-cx4*(fy(j)-by(i))/(fx(j)-bx(i))
+            cond1=cond1+bx(i)*(fy(j)-by(i))/(fx(j)-bx(i))-by(i)
+            if (cond1.le.0.0)then
+              cs1=sqrt((fy(j)-fy(i))**2+(fx(j)-fx(i))**2)
+              cs2=sqrt((by(j)-by(i))**2+(bx(j)-bx(i))**2)
+              uc2=sqrt((fy(j)-by(i))**2+(fx(j)-bx(i))**2)
+              v_f(i,j)=0.5*(cs1+cs2-uc1-uc2)/ds(i)
+            else
+              uc2=sqrt((fy(j)-cy4)**2+(fx(j)-cx4)**2)
+              uc2=uc2+sqrt((cy4-by(i))**2+(cx4-bx(i))**2)
+              cond2=cy4-cx4*(fy(j)-fy(i))/(fx(j)-fx(i))
+              cond2=cond2+fx(i)*(fy(j)-fy(i))/(fx(j)-fx(i))-fy(i)
+              if (cond2.gt.0.0)then
+                cs1=sqrt((fy(j)-cy4)**2+(fx(j)-cx4)**2)
+                cs1=cs1+sqrt((cy4-fy(i))**2+(cx4-fx(i))**2)
+              else
+                cs1=sqrt((fy(j)-fy(i))**2+(fx(j)-fx(i))**2)
+              endif
+              cond3=cy4-cx4*(by(j)-by(i))/(bx(j)-bx(i))
+              cond3=cond3+bx(i)*(by(j)-by(i))/(bx(j)-bx(i))-by(i)
+              if (cond3.gt.0.0)then
+                cs2=sqrt((by(j)-cy4)**2+(bx(j)-cx4)**2)
+                cs2=cs2+sqrt((cy4-by(i))**2+(cx4-bx(i))**2)
+              else
+                cs2=sqrt((by(j)-by(i))**2+(bx(j)-bx(i))**2)
+              endif
+              v_f(i,j)=0.5*(cs1+cs2-uc1-uc2)/ds(i)
+            endif
+          endif
+      return
+      end
+*====================================*
+      subroutine corner11
+      include 'input.in'
+* i=noc(10) with till noc(7)-1
+           i=noc(10)
+        do j=1,noc(7)-1
+          v_f(i,j)=0.0
+        enddo
+* i=noc(10) with i=noc(7) to noc(10)-1
+           i=noc(10)
+        do j=noc(7),noc(10)-1
+          v_f(i,j)=v_f(j,i)*ds(j)/ds(i)
+        enddo
+* i=noc(10) with i=noc(10)
+           i=noc(10)
+           j=noc(10)
+          v_f(i,j)=0.0
+* i=noc(10) with surface 11-to-17
+           i=noc(10)
+        do j=noc(10)+1,noc(17)
+          v_f(i,j)=0.0
+        enddo
+* i=noc(10) with surface 17 to noc(20)
+           i=noc(10)
+        do j=noc(17)+1,noc(20)
+          v_f(i,j)=v_f(j,i)*ds(j)/ds(i)
+        enddo
+* i=noc(10) with i=noc(18)
+           i=noc(10)
+           j=noc(18)
+          cs1=sqrt((fy(j)-fy(i))**2+(fx(j)-fx(i))**2)
+          cs2=sqrt((by(j)-cy5)**2+(bx(j)-cx5)**2)
+          uc1=sqrt((by(j)-fy(i))**2+(bx(j)-fx(i))**2)
+          uc2=sqrt((fy(j)-cy5)**2+(fx(j)-cx5)**2)
+          v_f(i,j)=0.5*(cs1+cs2-uc1-uc2)/ds(i)
+* i=noc(10) with i=noc(19)
+           i=noc(10)
+           j=noc(19)
+          cs1=sqrt((fy(j)-fy(i))**2+(fx(j)-fx(i))**2)
+          uc1=sqrt((by(j)-fy(i))**2+(bx(j)-fx(i))**2)
+          cond1=cy4-cx4*(fy(j)-by(i))/(fx(j)-bx(i))
+          cond1=cond1+bx(i)*(fy(j)-by(i))/(fx(j)-bx(i))-by(i)
+          if (cond1.le.0.0)then
+            cs2=sqrt((by(j)-by(i))**2+(bx(j)-bx(i))**2)
+            uc2=sqrt((fy(j)-by(i))**2+(fx(j)-bx(i))**2)
+            v_f(i,j)=0.5*(cs1+cs2-uc1-uc2)/ds(i)
+          else
+            uc2=sqrt((fy(j)-cy4)**2+(fx(j)-cx4)**2)
+            uc2=uc2+sqrt((cy4-by(i))**2+(cx4-bx(i))**2)
+            cond3=cy4-cx4*(by(j)-by(i))/(bx(j)-bx(i))
+            cond3=cond3+bx(i)*(by(j)-by(i))/(bx(j)-bx(i))-by(i)
+            if (cond3.gt.0.0)then
+              cs2=sqrt((by(j)-cy4)**2+(bx(j)-cx4)**2)
+              cs2=cs2+sqrt((cy4-by(i))**2+(cx4-bx(i))**2)
+            else
+              cs2=sqrt((by(j)-by(i))**2+(bx(j)-bx(i))**2)
+            endif
+            v_f(i,j)=0.5*(cs1+cs2-uc1-uc2)/ds(i)
+          endif
+      return
+      end
+*====================================*
+      subroutine corner12
+      include 'input.in'
+* i=noc(11) with other surfaces
+           i=noc(11)
+        do j=1,noc(20)
+          v_f(i,j)=v_f(j,i)*ds(j)/ds(i)
+        enddo
+* i=noc(11) with i=noc(12)
+           i=noc(11)
+           j=noc(12)
+          cs1=sqrt((fy(j)-fy(i))**2+(fx(j)-fx(i))**2)
+          cs2=sqrt((by(j)-cy6)**2+(bx(j)-cx6)**2)
+          uc1=sqrt((by(j)-fy(i))**2+(bx(j)-fx(i))**2)
+          uc2=sqrt((fy(j)-cy6)**2+(fx(j)-cx6)**2)
+          v_f(i,j)=0.5*(cs1+cs2-uc1-uc2)/ds(i)
+* i=noc(11) with i=noc(13)
+           i=noc(11)
+           j=noc(13)
+          cs1=sqrt((fy(j)-fy(i))**2+(fx(j)-fx(i))**2)
+          cs2=sqrt((by(j)-cy6)**2+(bx(j)-cx6)**2)
+          uc1=sqrt((by(j)-fy(i))**2+(bx(j)-fx(i))**2)
+          uc2=sqrt((fy(j)-cy6)**2+(fx(j)-cx6)**2)
+          v_f(i,j)=0.5*(cs1+cs2-uc1-uc2)/ds(i)
+* i=noc(11) with i=noc(14)
+           i=noc(11)
+           j=noc(14)
+          cs1=sqrt((cy7-fy(i))**2+(cx7-fx(i))**2)
+          cs1=cs1+sqrt((fy(j)-cy7)**2+(fx(j)-cx7)**2)
+          cs2=sqrt((cy6-by(i))**2+(cx6-bx(i))**2)
+          cs2=cs2+sqrt((by(j)-cy6)**2+(bx(j)-cx6)**2)
+          uc1=sqrt((by(j)-fy(i))**2+(bx(j)-fx(i))**2)
+          uc2=sqrt((fy(j)-by(i))**2+(fx(j)-bx(i))**2)
+          v_f(i,j)=0.5*(cs1+cs2-uc1-uc2)/ds(i)
+* i=noc(11) with surface 15-to-17
+           i=noc(11)
+        do j=noc(14)+1,noc(17)
+          v_f(i,j)=0.0
+        enddo
+* i=noc(11) with i=noc(18)
+           i=noc(11)
+           j=noc(18)
+          cs2=sqrt((by(j)-by(i))**2+(bx(j)-bx(i))**2)
+          uc2=sqrt((fy(j)-by(i))**2+(fx(j)-bx(i))**2)
+          cond2=cy7-cx7*(fy(j)-fy(i))/(fx(j)-fx(i))
+          cond2=cond2+fx(i)*(fy(j)-fy(i))/(fx(j)-fx(i))-fy(i)
+          if (cond2.lt.0.0)then
+            cs1=sqrt((fy(j)-cy7)**2+(fx(j)-cx7)**2)
+            cs1=cs1+sqrt((cy7-fy(i))**2+(cx7-fx(i))**2)
+          else
+            cs1=sqrt((fy(j)-fy(i))**2+(fx(j)-fx(i))**2)
+          endif
+          cond1=cy7-cx7*(by(j)-fy(i))/(bx(j)-fx(i))
+          cond1=cond1+fx(i)*(by(j)-fy(i))/(bx(j)-fx(i))-fy(i)
+          if (cond1.lt.0.0)then
+            uc1=sqrt((by(j)-cy7)**2+(bx(j)-cx7)**2)
+            uc1=uc1+sqrt((cy7-fy(i))**2.d0+(cx7-fx(i))**2)
+          else
+            uc1=sqrt((by(j)-fy(i))**2+(bx(j)-fx(i))**2)
+          endif
+          v_f(i,j)=0.5*(cs1+cs2-uc1-uc2)/ds(i)
+* i=noc(11) with i=noc(19)
+           i=noc(11)
+           j=noc(19)
+          cs1=sqrt((fy(j)-cy6)**2+(fx(j)-cx6)**2)
+          cs2=sqrt((by(j)-by(i))**2+(bx(j)-bx(i))**2)
+          uc1=sqrt((by(j)-cy6)**2+(bx(j)-cx6)**2)
+          uc2=sqrt((fy(j)-by(i))**2+(fx(j)-bx(i))**2)
+          v_f(i,j)=0.5*(cs1+cs2-uc1-uc2)/ds(i)
+      return
+      end
+*====================================*
+      subroutine corner13
+      include 'input.in'
+* i=noc(12) with till noc(11)-1
+           i=noc(12)
+        do j=1,noc(11)-1
+          v_f(i,j)=0.0
+        enddo
+* i=noc(12) with surface 12
+           i=noc(12)
+        do j=noc(11),noc(12)-1
+          v_f(i,j)=v_f(j,i)*ds(j)/ds(i)
+        enddo
+* i=noc(12) with i=noc(12)
+           i=noc(12)
+           j=noc(12)
+          cs1=sqrt((fy(i)-by(i))**2+(fx(i)-bx(i))**2)
+          v_f(i,j)=1.0-(cs1/ds(i))
+* i=noc(12) with surface 13 to all
+           i=noc(12)
+        do j=noc(12)+1,noc(20)
+          v_f(i,j)=v_f(j,i)*ds(j)/ds(i)
+        enddo
+* i=noc(12) with i=noc(13)
+           i=noc(12)
+           j=noc(13)
+          cs1=sqrt((fy(j)-fy(i))**2+(fx(j)-fx(i))**2)
+          cs2=sqrt((by(j)-by(i))**2+(bx(j)-bx(i))**2)
+          uc1=sqrt((by(j)-fy(i))**2+(bx(j)-fx(i))**2)
+          uc2=sqrt((fy(j)-by(i))**2+(fx(j)-bx(i))**2)
+          v_f(i,j)=0.5*(cs1+cs2-uc1-uc2)/ds(i)
+* i=noc(12) with i=noc(14)
+           i=noc(12)
+           j=noc(14)
+          cs1=sqrt((cy7-fy(i))**2+(cx7-fx(i))**2)
+          cs2=sqrt((by(j)-by(i))**2+(bx(j)-bx(i))**2)
+          uc1=sqrt((by(j)-fy(i))**2+(bx(j)-fx(i))**2)
+          uc2=sqrt((cy7-by(i))**2+(cx7-bx(i))**2)
+          v_f(i,j)=0.5*(cs1+cs2-uc1-uc2)/ds(i)
+* i=noc(12) with surface 11-to-17
+           i=noc(12)
+        do j=noc(14)+1,noc(17)
+          v_f(i,j)=0.0
+        enddo
+* i=noc(12) with i=noc(18)
+           i=noc(12)
+           j=noc(18)
+          cond=cy7-cx7*(fy(j)-by(i))/(fx(j)-bx(i))
+          cond=cond+bx(i)*(fy(j)-by(i))/(fx(j)-bx(i))-by(i)
+          if (cond.le.0.0)then
+            v_f(i,j)=0.0
+          else
+            uc2=sqrt((fy(j)-by(i))**2+(fx(j)-bx(i))**2)
+            cond1=cy7-cx7*(by(j)-fy(i))/(bx(j)-fx(i))
+            cond1=cond1+fx(i)*(by(j)-fy(i))/(bx(j)-fx(i))-fy(i)
+            if (cond1.ge.0.0)then
+              cs1=sqrt((fy(j)-fy(i))**2+(fx(j)-fx(i))**2)
+              cs2=sqrt((by(j)-by(i))**2+(bx(j)-bx(i))**2)
+              uc1=sqrt((by(j)-fy(i))**2+(bx(j)-fx(i))**2)
+              v_f(i,j)=0.5*(cs1+cs2-uc1-uc2)/ds(i)
+            else
+              uc1=sqrt((by(j)-cy7)**2+(bx(j)-cx7)**2)
+              uc1=uc1+sqrt((cy7-fy(i))**2+(cx7-fx(i))**2)
+              cond2=cy7-cx7*(fy(j)-fy(i))/(fx(j)-fx(i))
+              cond2=cond2+fx(i)*(fy(j)-fy(i))/(fx(j)-fx(i))-fy(i)
+              if (cond2.lt.0.0)then
+                cs1=sqrt((fy(j)-cy7)**2+(fx(j)-cx7)**2)
+                cs1=cs1+sqrt((cy7-fy(i))**2+(cx7-fx(i))**2)
+              else
+                cs1=sqrt((fy(j)-fy(i))**2+(fx(j)-fx(i))**2)
+              endif
+              cond3=cy7-cx7*(by(j)-by(i))/(bx(j)-bx(i))
+              cond3=cond3+bx(i)*(by(j)-by(i))/(bx(j)-bx(i))-by(i)
+              if (cond3.lt.0.0)then
+                cs2=sqrt((by(j)-cy7)**2+(bx(j)-cx7)**2)
+                cs2=cs2+sqrt((cy7-by(i))**2+(cx7-bx(i))**2)
+              else
+                cs2=sqrt((by(j)-by(i))**2+(bx(j)-bx(i))**2)
+              endif
+              v_f(i,j)=0.5*(cs1+cs2-uc1-uc2)/ds(i)
+            endif
+          endif
+* i=noc(12) with i=noc(19)
+           i=noc(12)
+           j=noc(19)
+          cond=cy6-cx6*(by(j)-fy(i))/(bx(j)-fx(i))
+          cond=cond+fx(i)*(by(j)-fy(i))/(bx(j)-fx(i))-fy(i)
+        if (cond.ge.0.0)then
+          v_f(i,j)=0.0
+        else
+          uc1=sqrt((by(j)-fy(i))**2+(bx(j)-fx(i))**2)
+          cond1=cy6-cx6*(fy(j)-by(i))/(fx(j)-bx(i))
+          cond1=cond1+bx(i)*(fy(j)-by(i))/(fx(j)-bx(i))-by(i)
+          if (cond1.le.0.0)then
+            cs1=sqrt((fy(j)-fy(i))**2+(fx(j)-fx(i))**2)
+            cs2=sqrt((by(j)-by(i))**2+(bx(j)-bx(i))**2)
+            uc2=sqrt((fy(j)-by(i))**2+(fx(j)-bx(i))**2)
+            v_f(i,j)=0.5*(cs1+cs2-uc1-uc2)/ds(i)
+          else
+            uc2=sqrt((fy(j)-cy6)**2+(fx(j)-cx6)**2)
+            uc2=uc2+sqrt((cy6-by(i))**2+(cx6-bx(i))**2)
+            cond2=cy6-cx6*(fy(j)-fy(i))/(fx(j)-fx(i))
+            cond2=cond2+fx(i)*(fy(j)-fy(i))/(fx(j)-fx(i))-fy(i)
+            if (cond2.gt.0.0)then
+              cs1=sqrt((fy(j)-cy6)**2+(fx(j)-cx6)**2)
+              cs1=cs1+sqrt((cy6-fy(i))**2+(cx6-fx(i))**2)
+            else
+              cs1=sqrt((fy(j)-fy(i))**2+(fx(j)-fx(i))**2)
+            endif
+            cond3=cy6-cx6*(by(j)-by(i))/(bx(j)-bx(i))
+            cond3=cond3+bx(i)*(by(j)-by(i))/(bx(j)-bx(i))-by(i)
+            if (cond3.gt.0.0)then
+              cs2=sqrt((by(j)-cy6)**2+(bx(j)-cx6)**2)
+              cs2=cs2+sqrt((cy6-by(i))**2+(cx6-bx(i))**2)
+            else
+              cs2=sqrt((by(j)-by(i))**2+(bx(j)-bx(i))**2)
+            endif
+            v_f(i,j)=0.5*(cs1+cs2-uc1-uc2)/ds(i)
+          endif
+        endif
+      return
+      end
+*====================================*
+      subroutine corner14
+      include 'input.in'
+* i=noc(13) with till noc(11)-1
+           i=noc(13)
+        do j=1,noc(11)-1
+          v_f(i,j)=0.0
+        enddo
+* i=noc(13) with i=noc(11)
+           i=noc(13)
+        do j=noc(11),noc(13)-1
+          v_f(i,j)=v_f(j,i)*ds(j)/ds(i)
+        enddo
+* i=noc(13) with i=noc(13)
+           i=noc(13)
+           j=noc(13)
+          cs1=sqrt((fy(i)-by(i))**2+(fx(i)-bx(i))**2)
+          v_f(i,j)=1.0-(cs1/ds(i))
+* i=noc(13) with surface 14
+           i=noc(13)
+        do j=noc(13)+1,noc(14)-1
+          v_f(i,j)=v_f(j,i)*ds(j)/ds(i)
+        enddo
+* i=noc(13) with i=noc(14)
+           i=noc(13)
+           j=noc(14)
+          cs1=sqrt((cy8-fy(i))**2+(cx8-fx(i))**2)
+          cs2=sqrt((by(j)-by(i))**2+(bx(j)-bx(i))**2)
+          uc1=sqrt((by(j)-fy(i))**2+(bx(j)-fx(i))**2)
+          uc2=sqrt((cy8-by(i))**2+(cx8-bx(i))**2)
+          v_f(i,j)=0.5*(cs1+cs2-uc1-uc2)/ds(i)
+* i=noc(13) with surface 15-to-17
+           i=noc(13)
+        do j=noc(14)+1,noc(17)
+          v_f(i,j)=0.0
+        enddo
+* i=noc(13) with i=noc(18)
+           i=noc(13)
+           j=noc(18)
+          cond=cy7-cx7*(fy(j)-by(i))/(fx(j)-bx(i))
+          cond=cond+bx(i)*(fy(j)-by(i))/(fx(j)-bx(i))-by(i)
+          if (cond.le.0.0)then
+            v_f(i,j)=0.0
+          else
+            uc2=sqrt((fy(j)-by(i))**2+(fx(j)-bx(i))**2)
+            cond3=cy7-cx7*(by(j)-by(i))/(bx(j)-bx(i))
+            cond3=cond3+bx(i)*(by(j)-by(i))/(bx(j)-bx(i))-by(i)
+            if (cond3.lt.0.0)then
+              cs2=sqrt((by(j)-cy7)**2+(bx(j)-cx7)**2)
+              cs2=cs2+sqrt((cy7-by(i))**2+(cx7-bx(i))**2)
+            else
+              cs2=sqrt((by(j)-by(i))**2+(bx(j)-bx(i))**2)
+            endif
+            uc1=sqrt((by(j)-cy7)**2+(bx(j)-cx7)**2)
+            uc1=uc1+sqrt((cy7-fy(i))**2+(fx(i)-cx7)**2)
+            cs1=sqrt((fy(j)-cy7)**2+(fx(j)-cx7)**2)
+            cs1=cs1+sqrt((cy7-fy(i))**2+(cx7-fx(i))**2)
+            v_f(i,j)=0.5*(cs1+cs2-uc1-uc2)/ds(i)
+          endif
+* i=noc(13) with i=noc(19)
+           i=noc(13)
+           j=noc(19)
+          cond=cy6-cx6*(by(j)-fy(i))/(bx(j)-fx(i))
+          cond=cond+fx(i)*(by(j)-fy(i))/(bx(j)-fx(i))-fy(i)
+          if (cond.ge.0.0)then
+            v_f(i,j)=0.0
+          else
+            uc1=sqrt((by(j)-fy(i))**2+(bx(j)-fx(i))**2)
+            cond1=cy6-cx6*(fy(j)-by(i))/(fx(j)-bx(i))
+            cond1=cond1+bx(i)*(fy(j)-by(i))/(fx(j)-bx(i))-by(i)
+            if (cond1.le.0.0)then
+              cs1=sqrt((fy(j)-fy(i))**2+(fx(j)-fx(i))**2)
+              cs2=sqrt((by(j)-by(i))**2+(bx(j)-bx(i))**2)
+              uc2=sqrt((fy(j)-by(i))**2+(fx(j)-bx(i))**2)
+              v_f(i,j)=0.5*(cs1+cs2-uc1-uc2)/ds(i)
+            else
+              uc2=sqrt((fy(j)-cy6)**2+(fx(j)-cx6)**2)
+              uc2=uc2+sqrt((cy6-by(i))**2+(cx6-bx(i))**2)
+              cond2=cy6-cx6*(fy(j)-fy(i))/(fx(j)-fx(i))
+              cond2=cond2+fx(i)*(fy(j)-fy(i))/(fx(j)-fx(i))-fy(i)
+              if (cond2.gt.0.0)then
+                cs1=sqrt((fy(j)-cy6)**2+(fx(j)-cx6)**2)
+                cs1=cs1+sqrt((cy6-fy(i))**2+(cx6-fx(i))**2)
+              else
+                cs1=sqrt((fy(j)-fy(i))**2+(fx(j)-fx(i))**2)
+              endif
+              cond3=cy6-cx6*(by(j)-by(i))/(bx(j)-bx(i))
+              cond3=cond3+bx(i)*(by(j)-by(i))/(bx(j)-bx(i))-by(i)
+              if (cond3.gt.0.0)then
+                cs2=sqrt((by(j)-cy6)**2+(bx(j)-cx6)**2)
+                cs2=cs2+sqrt((cy6-by(i))**2+(cx6-bx(i))**2)
+              else
+                cs2=sqrt((by(j)-by(i))**2+(bx(j)-bx(i))**2)
+              endif
+              v_f(i,j)=0.5*(cs1+cs2-uc1-uc2)/ds(i)
+            endif
+          endif
+      return
+      end
+*====================================*
+      subroutine corner15
+      include 'input.in'
+* i=noc(14) with till noc(11)-1
+           i=noc(14)
+        do j=1,noc(11)-1
+          v_f(i,j)=0.0
+        enddo
+* i=noc(14) with i=noc(11) to noc(14)-1
+           i=noc(14)
+        do j=noc(11),noc(14)-1
+          v_f(i,j)=v_f(j,i)*ds(j)/ds(i)
+        enddo
+* i=noc(14) with i=noc(14)
+           i=noc(14)
+           j=noc(14)
+          v_f(i,j)=0.0
+* i=noc(14) with surface 15-to-17
+           i=noc(14)
+        do j=noc(14)+1,noc(17)
+          v_f(i,j)=0.0
+        enddo
+* i=noc(14) with surface 17 to noc(20)
+           i=noc(14)
+        do j=noc(17)+1,noc(20)
+          v_f(i,j)=v_f(j,i)*ds(j)/ds(i)
+        enddo
+* i=noc(14) with i=noc(18)
+           i=noc(14)
+           j=noc(18)
+          cs1=sqrt((fy(j)-fy(i))**2+(fx(j)-fx(i))**2)
+          cs2=sqrt((by(j)-cy7)**2+(bx(j)-cx7)**2)
+          uc1=sqrt((by(j)-fy(i))**2+(bx(j)-fx(i))**2)
+          uc2=sqrt((fy(j)-cy7)**2+(fx(j)-cx7)**2)
+          v_f(i,j)=0.5*(cs1+cs2-uc1-uc2)/ds(i)
+* i=noc(14) with i=noc(19)
+           i=noc(14)
+           j=noc(19)
+          cs1=sqrt((fy(j)-fy(i))**2+(fx(j)-fx(i))**2)
+          uc1=sqrt((by(j)-fy(i))**2+(bx(j)-fx(i))**2)
+          cond1=cy6-cx6*(fy(j)-by(i))/(fx(j)-bx(i))
+          cond1=cond1+bx(i)*(fy(j)-by(i))/(fx(j)-bx(i))-by(i)
+          if (cond1.le.0.0)then
+            cs2=sqrt((by(j)-by(i))**2+(bx(j)-bx(i))**2)
+            uc2=sqrt((fy(j)-by(i))**2+(fx(j)-bx(i))**2)
+            v_f(i,j)=0.5*(cs1+cs2-uc1-uc2)/ds(i)
+          else
+            uc2=sqrt((fy(j)-cy6)**2+(fx(j)-cx6)**2)
+            uc2=uc2+sqrt((cy6-by(i))**2+(cx6-bx(i))**2)
+            cond3=cy6-cx6*(by(j)-by(i))/(bx(j)-bx(i))
+            cond3=cond3+bx(i)*(by(j)-by(i))/(bx(j)-bx(i))-by(i)
+            if (cond3.gt.0.0)then
+              cs2=sqrt((by(j)-cy6)**2+(bx(j)-cx6)**2)
+              cs2=cs2+sqrt((cy6-by(i))**2+(cx6-bx(i))**2)
+            else
+              cs2=sqrt((by(j)-by(i))**2+(bx(j)-bx(i))**2)
+            endif
+            v_f(i,j)=0.5*(cs1+cs2-uc1-uc2)/ds(i)
+          endif
+      return
+      end
+*====================================*
+      subroutine corner16
+      include 'input.in'
+* i=noc(15) with other surfaces
+           i=noc(15)
+        do j=1,noc(20)
+          v_f(i,j)=v_f(j,i)*ds(j)/ds(i)
+        enddo
+* i=noc(15) with i=noc(16)
+           i=noc(15)
+           j=noc(16)
+          cs1=sqrt((fy(j)-fy(i))**2+(fx(j)-fx(i))**2)
+          cs2=sqrt((by(j)-cy8)**2+(bx(j)-cx8)**2)
+          uc1=sqrt((by(j)-fy(i))**2+(bx(j)-fx(i))**2)
+          uc2=sqrt((fy(j)-cy8)**2+(fx(j)-cx8)**2)
+          v_f(i,j)=0.5*(cs1+cs2-uc1-uc2)/ds(i)
+* i=noc(15) with i=noc(16)
+           i=noc(15)
+           j=noc(16)
+          cs1=sqrt((fy(j)-fy(i))**2+(fx(j)-fx(i))**2)
+          cs2=sqrt((by(j)-cy8)**2+(bx(j)-cx8)**2)
+          uc1=sqrt((by(j)-fy(i))**2+(bx(j)-fx(i))**2)
+          uc2=sqrt((fy(j)-cy8)**2+(fx(j)-cx8)**2)
+          v_f(i,j)=0.5*(cs1+cs2-uc1-uc2)/ds(i)
+* i=noc(15) with i=noc(17)
+           i=noc(15)
+           j=noc(17)
+          cs1=sqrt((fy(j)-fy(i))**2+(fx(j)-fx(i))**2)
+          cs2=sqrt((by(j)-cy8)**2+(bx(j)-cx8)**2)
+          uc1=sqrt((by(j)-fy(i))**2+(bx(j)-fx(i))**2)
+          uc2=sqrt((fy(j)-cy8)**2+(fx(j)-cx8)**2)
+          v_f(i,j)=0.5*(cs1+cs2-uc1-uc2)/ds(i)
+* i=noc(15) with i=noc(18)
+           i=noc(15)
+           j=noc(18)
+          cs1=sqrt((fy(j)-fy(i))**2+(fx(j)-fx(i))**2)
+          cs2=sqrt((by(j)-by(i))**2+(bx(j)-bx(i))**2)
+          uc1=sqrt((by(j)-fy(i))**2+(bx(j)-fx(i))**2)
+          uc2=sqrt((fy(j)-by(i))**2+(fx(j)-bx(i))**2)
+          v_f(i,j)=0.5*(cs1+cs2-uc1-uc2)/ds(i)
+* i=noc(15) with i=noc(19)
+           i=noc(15)
+           j=noc(19)
+          cs1=sqrt((fy(j)-fy(i))**2+(fx(j)-fx(i))**2)
+          cs2=sqrt((by(j)-by(i))**2+(bx(j)-bx(i))**2)
+          uc1=sqrt((by(j)-fy(i))**2+(bx(j)-fx(i))**2)
+          uc2=sqrt((fy(j)-by(i))**2+(fx(j)-bx(i))**2)
+          v_f(i,j)=0.5*(cs1+cs2-uc1-uc2)/ds(i)
+      return
+      end
+*====================================*
+      subroutine corner17
+      include 'input.in'
+* i=noc(16) with all surfaces
+           i=noc(16)
+        do j=1,noc(20)
+          v_f(i,j)=v_f(j,i)*ds(j)/ds(i)
+        enddo
+* i=noc(16) with i=noc(16)
+           i=noc(16)
+           j=noc(16)
+          cs1=sqrt((fy(i)-by(i))**2+(fx(i)-bx(i))**2)
+          v_f(i,j)=1.0-(cs1/ds(i))
+* i=noc(16) with i=noc(17)
+           i=noc(16)
+           j=noc(17)
+          cs1=sqrt((fy(j)-fy(i))**2+(fx(j)-fx(i))**2)
+          cs2=sqrt((by(j)-by(i))**2+(bx(j)-bx(i))**2)
+          uc1=sqrt((by(j)-fy(i))**2+(bx(j)-fx(i))**2)
+          uc2=sqrt((fy(j)-by(i))**2+(fx(j)-bx(i))**2)
+          v_f(i,j)=0.5*(cs1+cs2-uc1-uc2)/ds(i)
+* i=noc(16) with i=noc(18)
+           i=noc(16)
+           j=noc(18)
+          cs1=sqrt((fy(j)-fy(i))**2+(fx(j)-fx(i))**2)
+          cs2=sqrt((by(j)-by(i))**2+(bx(j)-bx(i))**2)
+          uc1=sqrt((by(j)-fy(i))**2+(bx(j)-fx(i))**2)
+          uc2=sqrt((fy(j)-by(i))**2+(fx(j)-bx(i))**2)
+          v_f(i,j)=0.5*(cs1+cs2-uc1-uc2)/ds(i)
+* i=noc(16) with i=noc(19)
+           i=noc(16)
+           j=noc(19)
+          cond=cy8-cx8*(by(j)-fy(i))/(bx(j)-fx(i))
+          cond=cond+fx(i)*(by(j)-fy(i))/(bx(j)-fx(i))-fy(i)
+        if (cond.ge.0.0)then
+          v_f(i,j)=0.0
+        else
+          uc1=sqrt((by(j)-fy(i))**2+(bx(j)-fx(i))**2)
+          cond1=cy8-cx8*(fy(j)-by(i))/(fx(j)-bx(i))
+          cond1=cond1+bx(i)*(fy(j)-by(i))/(fx(j)-bx(i))-by(i)
+          if (cond1.le.0.0)then
+            cs1=sqrt((fy(j)-fy(i))**2+(fx(j)-fx(i))**2)
+            cs2=sqrt((by(j)-by(i))**2+(bx(j)-bx(i))**2)
+            uc2=sqrt((fy(j)-by(i))**2+(fx(j)-bx(i))**2)
+            v_f(i,j)=0.5*(cs1+cs2-uc1-uc2)/ds(i)
+          else
+            uc2=sqrt((fy(j)-cy8)**2+(fx(j)-cx8)**2)
+            uc2=uc2+sqrt((cy8-by(i))**2+(cx8-bx(i))**2)
+            cond2=cy8-cx8*(fy(j)-fy(i))/(fx(j)-fx(i))
+            cond2=cond2+fx(i)*(fy(j)-fy(i))/(fx(j)-fx(i))-fy(i)
+            if (cond2.gt.0.0)then
+              cs1=sqrt((fy(j)-cy8)**2+(fx(j)-cx8)**2)
+              cs1=cs1+sqrt((cy8-fy(i))**2+(cx8-fx(i))**2)
+            else
+              cs1=sqrt((fy(j)-fy(i))**2+(fx(j)-fx(i))**2)
+            endif
+            cond3=cy8-cx8*(by(j)-by(i))/(bx(j)-bx(i))
+            cond3=cond3+bx(i)*(by(j)-by(i))/(bx(j)-bx(i))-by(i)
+            if (cond3.gt.0.0)then
+              cs2=sqrt((by(j)-cy8)**2+(bx(j)-cx8)**2)
+              cs2=cs2+sqrt((cy8-by(i))**2+(cx8-bx(i))**2)
+            else
+              cs2=sqrt((by(j)-by(i))**2+(bx(j)-bx(i))**2)
+            endif
+            v_f(i,j)=0.5*(cs1+cs2-uc1-uc2)/ds(i)
+          endif
+        endif
+      return
+      end
+*====================================*
+      subroutine corner18
+      include 'input.in'
+* i=noc(17) with till noc(20)
+           i=noc(17)
+        do j=1,noc(20)
+          v_f(i,j)=v_f(j,i)*ds(j)/ds(i)
+        enddo
+* i=noc(17) with i=noc(17)
+           i=noc(17)
+           j=noc(17)
+          cs1=sqrt((fy(i)-by(i))**2+(fx(i)-bx(i))**2)
+          v_f(i,j)=1.0-(cs1/ds(i))
+* i=noc(17) with i=noc(18)
+           i=noc(17)
+           j=noc(18)
+          cs1=sqrt((fy(j)-fy(i))**2+(fx(j)-fx(i))**2)
+          cs2=sqrt((by(j)-by(i))**2+(bx(j)-bx(i))**2)
+          uc1=sqrt((by(j)-fy(i))**2+(bx(j)-fx(i))**2)
+          uc2=sqrt((fy(j)-by(i))**2+(fx(j)-bx(i))**2)
+          v_f(i,j)=0.5*(cs1+cs2-uc1-uc2)/ds(i)
+* i=noc(17) with i=noc(19)
+           i=noc(17)
+           j=noc(19)
+          cond=cy8-cx8*(by(j)-fy(i))/(bx(j)-fx(i))
+          cond=cond+fx(i)*(by(j)-fy(i))/(bx(j)-fx(i))-fy(i)
+          if (cond.ge.0.0)then
+            v_f(i,j)=0.0
+          else
+            uc1=sqrt((by(j)-fy(i))**2+(bx(j)-fx(i))**2)
+            cond1=cy8-cx8*(fy(j)-by(i))/(fx(j)-bx(i))
+            cond1=cond1+bx(i)*(fy(j)-by(i))/(fx(j)-bx(i))-by1(1)
+            if (cond1.le.0.0)then
+              cs1=sqrt((fy(j)-fy(i))**2+(fx(j)-fx(i))**2)
+              cs2=sqrt((by(j)-by(i))**2+(bx(j)-bx(i))**2)
+              uc2=sqrt((fy(j)-by(i))**2+(fx(j)-bx(i))**2)
+              v_f(i,j)=0.5*(cs1+cs2-uc1-uc2)/ds(i)
+            else
+              uc2=sqrt((fy(j)-cy8)**2+(fx(j)-cx8)**2)
+              uc2=uc2+sqrt((cy8-by(i))**2+(cx8-bx(i))**2)
+              cond2=cy8-cx8*(fy(j)-fy(i))/(fx(j)-fx(i))
+              cond2=cond2+fx(i)*(fy(j)-fy(i))/(fx(j)-fx(i))-fy(i)
+              if (cond2.gt.0.0)then
+                cs1=sqrt((fy(j)-cy8)**2+(fx(j)-cx8)**2)
+                cs1=cs1+sqrt((cy8-fy(i))**2+(cx8-fx(i))**2)
+              else
+                cs1=sqrt((fy(j)-fy(i))**2+(fx(j)-fx(i))**2)
+              endif
+              cond3=cy8-cx8*(by(j)-by(i))/(bx(j)-bx(i))
+              cond3=cond3+bx(i)*(by(j)-by(i))/(bx(j)-bx(i))-by(i)
+              if (cond3.gt.0.0)then
+                cs2=sqrt((by(j)-cy8)**2+(bx(j)-cx8)**2)
+                cs2=cs2+sqrt((cy8-by(i))**2+(cx8-bx(i))**2)
+              else
+                cs2=sqrt((by(j)-by(i))**2+(bx(j)-bx(i))**2)
+              endif
+              v_f(i,j)=0.5*(cs1+cs2-uc1-uc2)/ds(i)
+            endif
+          endif
+      return
+      end
+*====================================*
+      subroutine corner19
+      include 'input.in'
+* i=noc(18) with till noc(20)
+           i=noc(18)
+        do j=1,noc(20)
+          v_f(i,j)=v_f(j,i)*ds(j)/ds(i)
+        enddo
+* i=noc(18) with j=noc(19)
+           i=noc(18)
+           j=noc(19)
+          cs1=sqrt((fy(j)-fy(i))**2+(fx(j)-fx(i))**2)
+          cs2=sqrt((by(j)-by(i))**2+(bx(j)-bx(i))**2)
+          uc1=sqrt((by(j)-fy(i))**2+(bx(j)-fx(i))**2)
+          uc2=sqrt((fy(j)-by(i))**2+(fx(j)-bx(i))**2)
+          v_f(i,j)=0.5*(cs1+cs2-uc1-uc2)/ds(i)
+      return
+      end
+*====================================*
+      subroutine corner20
+      include 'input.in'
+* i=noc(19) with all surfaces
+           i=noc(19)
+        do j=1,noc(20)
+          v_f(i,j)=v_f(j,i)*ds(j)/ds(i)
+        enddo
+      return
+      end
+*====================================*
+      subroutine output
+      include 'input.in'
+
+      open(2,file='vf_short.dat')
+        write(2,20)
+20      format(15x,'fixed_vf')
+
+        do i=1,noc(20)
+        do j=1,noc(20)
+          add(i)=add(i)+v_f(i,j)
+        enddo
+        enddo
+
+        do i=noc(19)+1,noc(20)
+        do j=1,noc(20)
+          write(2,30)i,j,v_f(i,j),add(i)
+30        format(1x,i4,3x,i4,4x,d16.8,4x,d16.8)
+        enddo
+        enddo
+      close(2)
+
+      open(3,file='full_vf.dat')
+        write(3,100)
+100     format(15x,'shape factor sums')
+        do i=1,noc(20)
+        do j=1,noc(20)
+          add(i)=add(i)+v_f(i,j)
+        enddo
+        enddo
+
+        do i=1,noc(20)
+        do j=1,noc(20)
+          write(3,102)i,j,v_f(i,j),add(i)
+102       format(1x,i4,3x,i4,4x,d16.8,4x,d16.8)
+        enddo
+        enddo
+      close(3)
+
+      open(4,file='short_vf.dat')
+        write(4,103)
+103     format(15x,'summation of view factors')
+        do i=1,noc(20)
+          write (4,104)i,add(i)
+104       format(1x,i4,4x,d16.8)
+        enddo
+      close(4)
+
+      return
+      end
+*====================================*
+      subroutine ab_vf
+      include 'input.in'
+* Calculation for absorption factor Knowing viewfactor
+* Defining values of emissivity
+        do i=1,noc(20)
+          if (i.gt.noc(1).and.(i.lt.noc(4)))then
+            em(i)=roc
+          elseif (i.gt.noc(5).and.(i.lt.noc(8)))then
+            em(i)=roc
+          elseif (i.gt.noc(9).and.(i.lt.noc(12)))then
+            em(i)=roc
+          elseif (i.gt.noc(13).and.(i.lt.noc(16)))then
+            em(i)=roc
+          elseif (i.gt.noc(17).and.(i.lt.noc(18)))then
+            em(i)=roe
+          elseif (i.gt.noc(19))then
+            em(i)=roe
+          else
+            em(i)=rob
+          endif
+        enddo
+		
+        do i=1,noc(20)
+          if (i.eq.1)then
+            em(i)=(rob*dx1+dy1*roe)/(2.0*ds(i))
+          elseif (i.eq.noc(1))then
+            em(i)=(rob*dx1+dy2*roc)/(2.0*ds(i))
+          elseif (i.eq.noc(4))then
+            em(i)=(rob*dx1+dy2*roc)/(2.0*ds(i))
+          elseif (i.eq.noc(5))then
+            em(i)=(rob*dx1+dy2*roc)/(2.0*ds(i))
+          elseif (i.eq.noc(8))then
+            em(i)=(rob*dx1+dy2*roc)/(2.0*ds(i))
+          elseif (i.eq.noc(9))then
+            em(i)=(rob*dx1+dy2*roc)/(2.0*ds(i))
+          elseif (i.eq.noc(12))then
+            em(i)=(rob*dx1+dy2*roc)/(2.0*ds(i))
+          elseif (i.eq.noc(13))then
+            em(i)=(rob*dx1+dy2*roc)/(2.0*ds(i))
+          elseif (i.eq.noc(16))then
+            em(i)=(rob*dx1+dy2*roc)/(2.0*ds(i))
+          elseif (i.eq.noc(17))then
+            em(i)=(roe*dx1+dy3*rob)/(2.0*ds(i))
+          elseif (i.eq.noc(18))then
+            em(i)=(roe*dx3+dy3*rob)/(2.0*ds(i))
+          elseif (i.eq.noc(19))then
+            em(i)=(roe*dx3+dy1*rob)/(2.0*ds(i))
+        enddo
+
+* Defining values of reflectivity
+        do i=1,noc(20)
+          ro(i)=1-em(i)
+        enddo
+
+* Defining number of times to call gauss-siedel matrix
+        do i1=1,noc(20)
+
+* Defining cofficient of matrix
+          do i=1,noc(20)
+          do j=1,noc(20)+1
+            if ((j.ne.noc(20)+1).and.(i1.eq.1))then
+              if (i.ne.j) then
+                a(i,j)=v_f(i,j)*ro(j)
+              elseif (i.eq.j) then
+                a(i,j)=v_f(i,j)*ro(j)-1.0
+              endif
+            elseif (j.eq.noc(20)+1) then
+              a(i,j)=-v_f(i,i1)*em(i1)
+            endif
+          enddo
+          enddo
+* Defining old and new absorption factor
+          do i=1,noc(20)
+            a_fo(i,i1)=0.0
+            a_f(i,i1)=0.0
+          enddo
+          iteration=0
+700       iteration=iteration+1
+
+          do i=1,noc(20)
+            a_f(i,i1)=a(i,noc(20)+1)
+            do j=1,noc(20)
+              if (i.ne.j) then
+                a_f(i,i1)=a_f(i,i1)-a(i,j)*a_f(j,i1)
+              endif
+            enddo
+            a_f(i,i1)=a_f(i,i1)/a(i,i)
+          enddo
+
+          do i=1,noc(20)
+            if (abs(a_f(i,i1)-a_fo(i,i1)).gt.0.0) then
+* Giving absorption factor new values
+              do j=1,noc(20)
+                a_fo(j,i1)=a_f(j,i1)
+              enddo
+            goto 700
+            endif
+          enddo
+
+        enddo
+
+* Output file for result on absoroption factor
+
+        do i=1,noc(20)
+          ad(i)=0.0
+        enddo
+
+        open(4,file='z_absorption-factor.dat')
+          do i=1,noc(20)
+          do j=1,noc(20)
+            ad(i)=ad(i)+a_f(i,j)
+          enddo
+          enddo
+
+        write(4,120)
+120     format(15x,'absorption factor sums')
+          do i=1,noc(20)
+*      do j=1,noc(20)
+*      write(4,122)i,j,a_f(i,j),ad(i)
+*122   format(1x,i4,3x,i4,4x,d16.8,4x,d16.8)
+*      enddo
+          write(4,122)i,ad(i)
+122       format(1x,i4,4x,d16.8)
+
+          enddo
+        close(4)
+
+        open(5,file='z_ro_em.dat')
+        write(5,124)
+124     format(4x,'reflectivity and emissivity')
+          do j=1,noc(20)
+          write(5,126)j,ro(j),em(j)
+126       format(1x,i4,4x,d16.8,4x,d16.8)
+          enddo
+        close(5)
+
+        open (7,file='a_f.dat')
+          do i=1,noc(20)
+          do j=1,noc(20)
+            write(7,150)a_f(i,j)
+150         format(d16.8)
+          enddo
+          enddo
+        close (7)
+
+      return
+      end
+*====================================*
