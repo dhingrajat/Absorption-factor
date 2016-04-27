@@ -3,7 +3,7 @@
         call location
         call cordinate
         call self_vf
-***** Complete line w/o first and last point on it
+* Complete line w/o first and last point on it
         call surface1
         call surface2
         call surface3
@@ -53,12 +53,6 @@
 *===================================*
       subroutine location
       include 'input.in'
-        dx1=
-        dx2=
-        dx3=
-        dy1=
-        dy2=
-        dy3=
 ***** Four edge co-ordinates of chips
         cx1=x4
         cy1=y1+y2
@@ -80,10 +74,10 @@
         cx8=cx1
         cy8=cy7+y6
 
-***** Total number of corner points 20; noc=20
-***** M0,
-***** 20 th point is not a corner point. last one
-***** Only for two chip case
+* Total number of corner points 20; noc=20
+* M0,
+* 20 th point is not a corner point. last one
+* Only for two chip case
         M0=anint(y1/dy1)+1
         noc(1)=M0+anint(y2/dy2)
         noc(2)=noc(1)+anint(x4/dx1)
