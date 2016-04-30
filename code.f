@@ -854,7 +854,7 @@
             if (cond1.le.0.0)then
               cs1=sqrt((fy(j)-fy(i))**2+(fx(j)-fx(i))**2)
               cs2=sqrt((by(j)-by(i))**2+(bx(j)-bx(i))**2)
-              uc2=sqrt((fy2(2)-by1(1))**2+(fx(j)-bx(i))**2)
+              uc2=sqrt((fy(j)-by(i))**2+(fx(j)-bx(i))**2)
               v_f(i,j)=0.5*(cs1+cs2-uc1-uc2)/ds(i)
             else
               uc2=sqrt((fy(j)-cy2)**2+(fx(j)-cx2)**2)
@@ -1281,7 +1281,7 @@
           else
             uc1=sqrt((by(j)-fy(i))**2+(bx(j)-fx(i))**2)
             cond1=cy4-cx4*(fy(j)-by(i))/(fx(j)-bx(i))
-            cond1=cond1+bx(i)*(fy(j)-by(i))/(fx(j)-bx(i))-by1(1)
+            cond1=cond1+bx(i)*(fy(j)-by(i))/(fx(j)-bx(i))-by(i)
             if (cond1.le.0.0)then
               cs1=sqrt((fy(j)-fy(i))**2+(fx(j)-fx(i))**2)
               cs2=sqrt((by(j)-by(i))**2+(bx(j)-bx(i))**2)
@@ -1715,7 +1715,7 @@
           else
             uc1=sqrt((by(j)-fy(i))**2+(bx(j)-fx(i))**2)
             cond1=cy6-cx6*(fy(j)-by(i))/(fx(j)-bx(i))
-            cond1=cond1+bx(i)*(fy(j)-by(i))/(fx(j)-bx(i))-by1(1)
+            cond1=cond1+bx(i)*(fy(j)-by(i))/(fx(j)-bx(i))-by(i)
             if (cond1.le.0.0)then
               cs1=sqrt((fy(j)-fy(i))**2+(fx(j)-fx(i))**2)
               cs2=sqrt((by(j)-by(i))**2+(bx(j)-bx(i))**2)
@@ -1999,7 +1999,7 @@
           else
             uc1=sqrt((by(j)-fy(i))**2+(bx(j)-fx(i))**2)
             cond1=cy8-cx8*(fy(j)-by(i))/(fx(j)-bx(i))
-            cond1=cond1+bx(i)*(fy(j)-by(i))/(fx(j)-bx(i))-by1(1)
+            cond1=cond1+bx(i)*(fy(j)-by(i))/(fx(j)-bx(i))-by(i)
             if (cond1.le.0.0)then
               cs1=sqrt((fy(j)-fy(i))**2+(fx(j)-fx(i))**2)
               cs2=sqrt((by(j)-by(i))**2+(bx(j)-bx(i))**2)
@@ -5799,7 +5799,7 @@
           else
             uc1=sqrt((by(j)-fy(i))**2+(bx(j)-fx(i))**2)
             cond1=cy8-cx8*(fy(j)-by(i))/(fx(j)-bx(i))
-            cond1=cond1+bx(i)*(fy(j)-by(i))/(fx(j)-bx(i))-by1(1)
+            cond1=cond1+bx(i)*(fy(j)-by(i))/(fx(j)-bx(i))-by(i)
             if (cond1.le.0.0)then
               cs1=sqrt((fy(j)-fy(i))**2+(fx(j)-fx(i))**2)
               cs2=sqrt((by(j)-by(i))**2+(bx(j)-bx(i))**2)
@@ -5908,7 +5908,7 @@
       return
       end
 *====================================*
-      subroutine ab_vf
+      subroutine ab_factor
       include 'input.in'
 * Calculation for absorption factor Knowing viewfactor
 * Defining values of emissivity
