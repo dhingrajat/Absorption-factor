@@ -546,6 +546,7 @@
           uc2=sqrt((fy(j)-by(i))**2+(fx(j)-bx(i))**2)
           v_f(i,j)=0.5*(cs1+cs2-uc1-uc2)/ds(i)
         enddo
+        enddo
 * Surface 2 with surface 3-18 and 19 partly
         do i=noc(1)+1,noc(2)-1
         do j=noc(2),noc(19)-noc(1)
@@ -1023,7 +1024,7 @@
         enddo
 * Surface 7 with surface 18 half to Surface 20 half
         do i=noc(6)+1,noc(7)-1
-        do j=noc(17)+noc(2)-noc(1)+1,,noc(20)-noc(2)+noc(1)
+        do j=noc(17)+noc(2)-noc(1)+1,noc(20)-noc(2)+noc(1)
           cs1=sqrt((fy(j)-fy(i))**2+(fx(j)-fx(i))**2)
           cs2=sqrt((by(j)-by(i))**2+(bx(j)-bx(i))**2)
           uc1=sqrt((by(j)-fy(i))**2+(bx(j)-fx(i))**2)
@@ -1181,7 +1182,7 @@
         enddo
 * Surface 9 from surface 8
         do i=noc(8)+1,noc(9)-1
-        do i=noc(7)+1,noc(8)-1
+        do j=noc(7)+1,noc(8)-1
           v_f(i,j)=v_f(j,i)*ds(j)/ds(i)
         enddo
         enddo
@@ -2493,7 +2494,6 @@
           uc2=sqrt((fy(j)-by(i))**2+(fx(j)-bx(i))**2)
           v_f(i,j)=0.5*(cs1+cs2-uc1-uc2)/ds(i)
         enddo
-        enddo
 * Surface 18 with corner noc(16)
         do i=noc(17)+1,noc(18)-1
            j=noc(16)
@@ -3235,7 +3235,7 @@
               else
                 cs1=sqrt((fy(j)-fy(i))**2+(fx(j)-fx(i))**2)
               endif
-              cond3=cy5-cx5*(by*(j)-by(i))/(bx(j)-bx(i))
+              cond3=cy5-cx5*(by(j)-by(i))/(bx(j)-bx(i))
               cond3=cond3+bx(i)*(by(j)-by(i))/(bx(j)-bx(i))-by(i)
               if (cond3.lt.0.0)then
                 cs2=sqrt((by(j)-cy5)**2+(bx(j)-cx5)**2)
@@ -3375,7 +3375,7 @@
 * Surface 19 noc(18)+noc(17)+noc(15)+noc(13)+noc(11)
 * -noc(16)-noc(14)-noc(12)-noc(10)-1 with noc(10)
         do i=noc(18)+1,noc(18)+noc(17)+noc(15)+noc(13)+noc(11)-
-           noc(16)-noc(14)-noc(12)-noc(10)-1
+     &     noc(16)-noc(14)-noc(12)-noc(10)-1
            j=noc(10)
           cs1=sqrt((fy(j)-fy(i))**2+(fx(j)-fx(i))**2)
           cs2=sqrt((by(j)-cy5)**2+(bx(j)-cx5)**2)
@@ -3385,7 +3385,7 @@
         enddo
 * Surface 19 point i1+1 with corner noc(10)
            i=noc(18)+noc(17)+noc(15)+noc(13)+noc(11)-
-           noc(16)-noc(14)-noc(12)-noc(10)
+     &     noc(16)-noc(14)-noc(12)-noc(10)
            j=noc(10)
           cs1=sqrt((fy(j)-fy(i))**2+(fx(j)-fx(i))**2)
           uc1=sqrt((by(j)-fy(i))**2+(bx(j)-fx(i))**2)
@@ -3395,7 +3395,7 @@
           v_f(i,j)=0.5*(cs1+cs2-uc1-uc2)/ds(i)
 * Surface 19 with i1+2 with corner noc(10)
         do i=noc(18)+noc(17)+noc(15)+noc(13)+noc(11)-
-           noc(16)-noc(14)-noc(12)-noc(10)+1,noc(19)-1
+     &     noc(16)-noc(14)-noc(12)-noc(10)+1,noc(19)-1
            j=noc(10)
           cs1=sqrt((fy(j)-fy(i))**2+(fx(j)-fx(i))**2)
           uc2=sqrt((fy(j)-by(i))**2+(fx(j)-bx(i))**2)
@@ -3491,7 +3491,7 @@
               else
                 cs1=sqrt((fy(j)-fy(i))**2+(fx(j)-fx(i))**2)
               endif
-              cond3=cy7-cx7*(by*(j)-by(i))/(bx(j)-bx(i))
+              cond3=cy7-cx7*(by(j)-by(i))/(bx(j)-bx(i))
               cond3=cond3+bx(i)*(by(j)-by(i))/(bx(j)-bx(i))-by(i)
               if (cond3.lt.0.0)then
                 cs2=sqrt((by(j)-cy7)**2+(bx(j)-cx7)**2)
@@ -5955,6 +5955,7 @@
             em(i)=(roe*dx3+dy3*rob)/(2.0*ds(i))
           elseif (i.eq.noc(19))then
             em(i)=(roe*dx3+dy1*rob)/(2.0*ds(i))
+          endif
         enddo
 
 * Defining values of reflectivity
